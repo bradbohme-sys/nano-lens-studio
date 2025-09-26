@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { Upload, ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
+import { CanvasOverlays } from "./CanvasOverlays";
 
 interface MainCanvasProps {
   activeTool: string;
@@ -8,8 +9,10 @@ interface MainCanvasProps {
 
 export const MainCanvas = ({ activeTool, isProcessing }: MainCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [hasImage, setHasImage] = useState(false);
   const [zoom, setZoom] = useState(100);
+  const [isDragOver, setIsDragOver] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -43,9 +46,8 @@ export const MainCanvas = ({ activeTool, isProcessing }: MainCanvasProps) => {
     }
   }, [hasImage]);
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  const loadImageToCanvas = (file: File) => {
+    if (!file.type.startsWith('image/')) return;
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -74,8 +76,43 @@ export const MainCanvas = ({ activeTool, isProcessing }: MainCanvasProps) => {
     reader.readAsDataURL(file);
   };
 
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      loadImageToCanvas(file);
+      // Reset input
+      if (event.target) event.target.value = '';
+    }
+  };
+
+  const handleDrop = (event: React.DragEvent) => {
+    event.preventDefault();
+    setIsDragOver(false);
+    
+    const files = event.dataTransfer.files;
+    if (files.length > 0) {
+      loadImageToCanvas(files[0]);
+    }
+  };
+
+  const handleDragOver = (event: React.DragEvent) => {
+    event.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragOver(false);
+  };
+
   return (
-    <div className="flex-1 relative bg-viewfinder border border-border m-4 rounded-lg overflow-hidden">
+    <div 
+      className={`flex-1 relative bg-viewfinder border border-border m-4 rounded-lg overflow-hidden
+        ${isDragOver ? 'border-primary border-2 bg-primary/10' : ''}
+      `}
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+    >
       {/* Canvas Controls */}
       <div className="absolute top-4 right-4 z-10 flex gap-2">
         <button 
@@ -111,19 +148,27 @@ export const MainCanvas = ({ activeTool, isProcessing }: MainCanvasProps) => {
         }}
       />
 
+      {/* Canvas Overlays */}
+      <CanvasOverlays activeTool={activeTool} hasImage={hasImage} />
+
       {/* Upload Overlay */}
       {!hasImage && (
         <div className="absolute inset-0 flex items-center justify-center">
           <label className="cursor-pointer group">
             <input
+              ref={fileInputRef}
               type="file"
               accept="image/*"
               onChange={handleFileUpload}
               className="hidden"
             />
-            <div className="camera-panel p-8 rounded-lg text-center group-hover:scale-105 transition-transform">
+            <div className={`camera-panel p-8 rounded-lg text-center group-hover:scale-105 transition-transform
+              ${isDragOver ? 'scale-105 border border-primary' : ''}
+            `}>
               <Upload size={48} className="mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-lg font-semibold mb-2">Upload Image</h3>
+              <h3 className="text-lg font-semibold mb-2">
+                {isDragOver ? 'Drop Image Here' : 'Upload Image'}
+              </h3>
               <p className="text-muted-foreground">
                 Drag & drop or click to select an image
               </p>

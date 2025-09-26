@@ -5,11 +5,16 @@ import { MainCanvas } from "./canvas/MainCanvas";
 import { ModuleTabs } from "./navigation/ModuleTabs";
 import { StatusBar } from "./ui/StatusBar";
 import { LayersPanel } from "./panels/LayersPanel";
+import { RightPanelNav } from "./panels/RightPanelNav";
+import { CharacterPanel } from "./panels/CharacterPanel";
+import { ScenePanel } from "./panels/ScenePanel";
+import { LightingPanel } from "./panels/LightingPanel";
 
 export const DSLRInterface = () => {
   const [activeModule, setActiveModule] = useState<'editor' | 'composer' | 'settings' | 'export'>('editor');
   const [activeTool, setActiveTool] = useState<string>('select');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [activePanel, setActivePanel] = useState<string>('camera');
 
   return (
     <div className="h-screen w-full bg-camera-body flex flex-col">
@@ -65,13 +70,42 @@ export const DSLRInterface = () => {
         </div>
 
         {/* Right Controls Panel */}
-        <div className="w-80 flex flex-col">
-          <CameraControls 
-            activeModule={activeModule}
-            onProcessingChange={setIsProcessing}
+        <div className="flex">
+          <RightPanelNav 
+            activePanel={activePanel}
+            onPanelChange={setActivePanel}
           />
           
-          <LayersPanel />
+          <div className="w-72 flex flex-col">
+            {activePanel === 'camera' && (
+              <CameraControls 
+                activeModule={activeModule}
+                onProcessingChange={setIsProcessing}
+              />
+            )}
+            {activePanel === 'character' && <CharacterPanel />}
+            {activePanel === 'scene' && <ScenePanel />}
+            {activePanel === 'lighting' && <LightingPanel />}
+            {activePanel === 'layers' && <LayersPanel />}
+            {activePanel === 'style' && (
+              <div className="p-4">
+                <h2 className="font-semibold mb-4 text-center font-mono">STYLE</h2>
+                <p className="text-muted-foreground text-center">Style controls coming soon...</p>
+              </div>
+            )}
+            {activePanel === 'effects' && (
+              <div className="p-4">
+                <h2 className="font-semibold mb-4 text-center font-mono">EFFECTS</h2>
+                <p className="text-muted-foreground text-center">Effects controls coming soon...</p>
+              </div>
+            )}
+            {activePanel === 'settings' && (
+              <div className="p-4">
+                <h2 className="font-semibold mb-4 text-center font-mono">SETTINGS</h2>
+                <p className="text-muted-foreground text-center">Settings panel coming soon...</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

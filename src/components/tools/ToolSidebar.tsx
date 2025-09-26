@@ -8,7 +8,11 @@ import {
   RotateCw,
   Square,
   Circle,
-  Type
+  Type,
+  Scale,
+  User,
+  Mountain,
+  Lightbulb
 } from "lucide-react";
 
 interface ToolSidebarProps {
@@ -20,12 +24,16 @@ interface ToolSidebarProps {
 export const ToolSidebar = ({ activeTool, onToolChange, module }: ToolSidebarProps) => {
   const editorTools = [
     { id: 'select', label: 'Select', icon: MousePointer },
+    { id: 'move', label: 'Move', icon: Move },
+    { id: 'rotate', label: 'Rotate', icon: RotateCw },
+    { id: 'scale', label: 'Scale', icon: Scale },
     { id: 'crop', label: 'Crop', icon: Crop },
     { id: 'lasso', label: 'Lasso', icon: Lasso },
     { id: 'segment', label: 'Auto Segment', icon: Wand2 },
     { id: 'brush', label: 'Brush', icon: Brush },
-    { id: 'move', label: 'Move', icon: Move },
-    { id: 'rotate', label: 'Rotate', icon: RotateCw },
+    { id: 'character', label: 'Character', icon: User },
+    { id: 'scene', label: 'Scene', icon: Mountain },
+    { id: 'lighting', label: 'Lighting', icon: Lightbulb },
   ];
 
   const composerTools = [
