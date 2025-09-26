@@ -57,6 +57,20 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // DSLR Camera Colors
+        "camera-body": "hsl(var(--camera-body))",
+        "camera-grip": "hsl(var(--camera-grip))",
+        "lcd-background": "hsl(var(--lcd-background))",
+        "lcd-text": "hsl(var(--lcd-text))",
+        "lcd-amber": "hsl(var(--lcd-amber))",
+        "button-raised": "hsl(var(--button-raised))",
+        "button-pressed": "hsl(var(--button-pressed))",
+        "dial-chrome": "hsl(var(--dial-chrome))",
+        "viewfinder": "hsl(var(--viewfinder))",
+      },
+      fontFamily: {
+        mono: "var(--font-mono)",
+        display: "var(--font-display)",
       },
       borderRadius: {
         lg: "var(--radius)",

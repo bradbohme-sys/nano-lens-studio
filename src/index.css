@@ -2,41 +2,78 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+/* DSLR Camera-Inspired Design System 
+Professional photo editing interface with camera body aesthetics
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Camera Body Colors */
+    --background: 0 0% 8%;           /* Deep camera black */
+    --foreground: 0 0% 95%;          /* Bright LCD text */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 0 0% 12%;                /* Camera body panels */
+    --card-foreground: 0 0% 90%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 95%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Camera Accent Colors */
+    --primary: 0 100% 45%;           /* Canon red accent */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 0 0% 20%;           /* Dark metallic */
+    --secondary-foreground: 0 0% 85%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 0 0% 15%;               /* Recessed areas */
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 120 100% 55%;          /* LCD green accent */
+    --accent-foreground: 0 0% 5%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Camera UI Elements */
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 0 0% 25%;              /* Panel borders */
+    --input: 0 0% 18%;               /* Input backgrounds */
+    --ring: 0 100% 45%;              /* Focus rings */
 
-    --radius: 0.5rem;
+    --radius: 0.375rem;
+
+    /* DSLR-Specific Design Tokens */
+    --camera-body: 0 0% 12%;         /* Main body color */
+    --camera-grip: 0 0% 8%;          /* Textured grip areas */
+    --lcd-background: 220 20% 15%;   /* LCD screen background */
+    --lcd-text: 120 100% 70%;        /* LCD readout text */
+    --lcd-amber: 45 100% 60%;        /* Warning LCD text */
+    --button-raised: 0 0% 25%;       /* Physical button appearance */
+    --button-pressed: 0 0% 15%;      /* Pressed button state */
+    --dial-chrome: 210 10% 40%;      /* Metallic dial appearance */
+    --viewfinder: 0 0% 5%;           /* Viewfinder background */
+    
+    /* Professional Gradients */
+    --gradient-camera-body: linear-gradient(135deg, hsl(0 0% 15%), hsl(0 0% 8%));
+    --gradient-metallic: linear-gradient(90deg, hsl(210 10% 35%), hsl(210 10% 45%), hsl(210 10% 35%));
+    --gradient-lcd: linear-gradient(180deg, hsl(220 20% 20%), hsl(220 20% 12%));
+    --gradient-button: linear-gradient(180deg, hsl(0 0% 28%), hsl(0 0% 18%));
+    --gradient-dial: conic-gradient(from 0deg, hsl(210 10% 30%), hsl(210 10% 50%), hsl(210 10% 30%));
+    
+    /* Shadows and Effects */
+    --shadow-raised: 0 2px 8px hsl(0 0% 0% / 0.6), inset 0 1px 1px hsl(0 0% 100% / 0.1);
+    --shadow-recessed: inset 0 2px 6px hsl(0 0% 0% / 0.8), inset 0 1px 1px hsl(0 0% 100% / 0.05);
+    --shadow-lcd: 0 0 20px hsl(120 100% 70% / 0.3);
+    --shadow-glow: 0 0 30px hsl(var(--primary) / 0.4);
+    
+    /* Typography Scale */
+    --font-mono: "JetBrains Mono", "Fira Code", monospace;
+    --font-display: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    
+    /* Animation Timings */
+    --transition-quick: 0.15s ease-out;
+    --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-dial: 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
 
@@ -101,5 +138,147 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-display);
   }
+}
+
+@layer components {
+  /* DSLR Camera Components */
+  .camera-body {
+    @apply bg-gradient-to-br from-[hsl(var(--camera-body))] to-[hsl(var(--camera-grip))];
+    box-shadow: var(--shadow-raised);
+  }
+  
+  .camera-panel {
+    @apply bg-card border border-border rounded-lg;
+    background: var(--gradient-camera-body);
+    box-shadow: var(--shadow-raised);
+  }
+  
+  .lcd-display {
+    @apply bg-[hsl(var(--lcd-background))] text-[hsl(var(--lcd-text))] font-mono text-sm;
+    background: var(--gradient-lcd);
+    box-shadow: var(--shadow-recessed), var(--shadow-lcd);
+    border: 1px solid hsl(var(--border));
+  }
+  
+  .camera-button {
+    @apply bg-[hsl(var(--button-raised))] border border-border rounded-sm transition-all duration-[var(--transition-quick)];
+    background: var(--gradient-button);
+    box-shadow: var(--shadow-raised);
+  }
+  
+  .camera-button:hover {
+    @apply bg-[hsl(var(--button-pressed))];
+    box-shadow: var(--shadow-recessed);
+  }
+  
+  .camera-button:active {
+    @apply bg-[hsl(var(--button-pressed))];
+    box-shadow: var(--shadow-recessed);
+    transform: translateY(1px);
+  }
+  
+  .camera-dial {
+    @apply relative rounded-full border-2 border-[hsl(var(--dial-chrome))] cursor-pointer transition-transform duration-[var(--transition-dial)];
+    background: var(--gradient-dial);
+    box-shadow: var(--shadow-raised);
+  }
+  
+  .camera-dial:hover {
+    @apply scale-105;
+  }
+  
+  .viewfinder {
+    @apply bg-[hsl(var(--viewfinder))] border-2 border-[hsl(var(--border))] rounded;
+    box-shadow: var(--shadow-recessed);
+  }
+  
+  .tool-active {
+    @apply bg-primary text-primary-foreground;
+    box-shadow: var(--shadow-glow);
+  }
+  
+  .status-indicator {
+    @apply inline-block w-2 h-2 rounded-full animate-pulse;
+  }
+  
+  .status-recording {
+    @apply bg-primary;
+  }
+  
+  .status-ready {
+    @apply bg-accent;
+  }
+  
+  .status-processing {
+    @apply bg-[hsl(var(--lcd-amber))];
+  }
+}
+
+@layer utilities {
+  /* Custom Animation Classes */
+  .animate-dial-turn {
+    animation: dialTurn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  .animate-button-press {
+    animation: buttonPress 0.15s ease-out;
+  }
+  
+  .animate-lcd-glow {
+    animation: lcdGlow 2s ease-in-out infinite alternate;
+  }
+  
+  .animate-fade-in-up {
+    animation: fadeInUp 0.3s ease-out;
+  }
+  
+  /* Utility Classes */
+  .text-lcd {
+    @apply text-[hsl(var(--lcd-text))] font-mono;
+  }
+  
+  .text-lcd-amber {
+    @apply text-[hsl(var(--lcd-amber))] font-mono;
+  }
+  
+  .bg-camera-body {
+    background: var(--gradient-camera-body);
+  }
+  
+  .bg-metallic {
+    background: var(--gradient-metallic);
+  }
+  
+  .shadow-camera {
+    box-shadow: var(--shadow-raised);
+  }
+  
+  .shadow-recessed {
+    box-shadow: var(--shadow-recessed);
+  }
+}
+
+/* Keyframe Animations */
+@keyframes dialTurn {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(5deg) scale(1.05); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+@keyframes buttonPress {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(2px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes lcdGlow {
+  0% { box-shadow: var(--shadow-recessed), 0 0 10px hsl(120 100% 70% / 0.2); }
+  100% { box-shadow: var(--shadow-recessed), 0 0 20px hsl(120 100% 70% / 0.6); }
+}
+
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
