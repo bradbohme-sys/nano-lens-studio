@@ -163,7 +163,7 @@ All colors MUST be HSL.
   }
   
   .camera-button {
-    @apply bg-[hsl(var(--button-raised))] border border-border rounded-sm transition-all duration-[var(--transition-quick)];
+    @apply bg-[hsl(var(--button-raised))] border border-border rounded-sm transition-all duration-150;
     background: var(--gradient-button);
     box-shadow: var(--shadow-raised);
   }
@@ -180,7 +180,7 @@ All colors MUST be HSL.
   }
   
   .camera-dial {
-    @apply relative rounded-full border-2 border-[hsl(var(--dial-chrome))] cursor-pointer transition-transform duration-[var(--transition-dial)];
+    @apply relative rounded-full border-2 border-[hsl(var(--dial-chrome))] cursor-pointer transition-transform duration-200;
     background: var(--gradient-dial);
     box-shadow: var(--shadow-raised);
   }
