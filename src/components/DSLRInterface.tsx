@@ -15,6 +15,11 @@ export const DSLRInterface = () => {
   const [activeTool, setActiveTool] = useState<string>('select');
   const [isProcessing, setIsProcessing] = useState(false);
   const [activePanel, setActivePanel] = useState<string>('camera');
+  const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
+
+  const handleImageGenerated = (imageUrl: string) => {
+    setGeneratedImageUrl(imageUrl);
+  };
 
   return (
     <div className="h-screen w-full bg-camera-body flex flex-col">
@@ -60,6 +65,7 @@ export const DSLRInterface = () => {
           <MainCanvas 
             activeTool={activeTool}
             isProcessing={isProcessing}
+            generatedImageUrl={generatedImageUrl}
           />
           
           {/* Bottom Status Bar */}
@@ -81,6 +87,7 @@ export const DSLRInterface = () => {
               <CameraControls 
                 activeModule={activeModule}
                 onProcessingChange={setIsProcessing}
+                onImageGenerated={handleImageGenerated}
               />
             )}
             {activePanel === 'character' && <CharacterPanel />}

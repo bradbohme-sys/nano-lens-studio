@@ -1,29 +1,118 @@
-import { useState } from "react";
-import { Aperture, Camera, Timer, Sun, Contrast, Palette, Sparkles } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Aperture, Camera, Timer, Sun, Contrast, Palette, Sparkles, Save, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useImageGeneration } from "@/hooks/useImageGeneration";
+import { useProjectManagement } from "@/hooks/useProjectManagement";
 
 interface CameraControlsProps {
   activeModule: 'editor' | 'composer' | 'settings' | 'export';
   onProcessingChange: (processing: boolean) => void;
+  onImageGenerated: (imageUrl: string) => void;
 }
 
-export const CameraControls = ({ activeModule, onProcessingChange }: CameraControlsProps) => {
+export const CameraControls = ({ activeModule, onProcessingChange, onImageGenerated }: CameraControlsProps) => {
   const [aperture, setAperture] = useState(2.8);
   const [iso, setIso] = useState(400);
   const [shutterSpeed, setShutterSpeed] = useState(60);
   const [exposure, setExposure] = useState(0);
-  const [contrast, setContrast] = useState(0);
-  const [saturation, setSaturation] = useState(0);
+  const [contrast, setContrast] = useState(50);
+  const [saturation, setSaturation] = useState(50);
+  const [prompt, setPrompt] = useState("");
+  const [projectName, setProjectName] = useState("Untitled Project");
+
+  const { isGenerating, generateImage } = useImageGeneration();
+  const { currentProject, isSaving, saveProject, saveGeneratedImage } = useProjectManagement();
+
+  useEffect(() => {
+    onProcessingChange(isGenerating);
+  }, [isGenerating, onProcessingChange]);
+
+  useEffect(() => {
+    if (currentProject) {
+      const settings = currentProject.settings;
+      if (settings.camera) {
+        setAperture(settings.camera.aperture ?? 2.8);
+        setIso(settings.camera.iso ?? 400);
+        setShutterSpeed(settings.camera.shutterSpeed ?? 60);
+        setExposure(settings.camera.exposure ?? 0);
+        setContrast(settings.camera.contrast ?? 50);
+        setSaturation(settings.camera.saturation ?? 50);
+      }
+      if (settings.prompt) {
+        setPrompt(settings.prompt);
+      }
+      setProjectName(currentProject.name);
+    }
+  }, [currentProject]);
 
   const handleGenerate = async () => {
-    onProcessingChange(true);
-    // Simulate AI processing
-    setTimeout(() => {
-      onProcessingChange(false);
-    }, 3000);
+    const cameraSettings = {
+      aperture,
+      iso,
+      shutterSpeed,
+      exposure,
+      contrast,
+      saturation,
+    };
+
+    const imageUrl = await generateImage(prompt, cameraSettings);
+    
+    if (imageUrl) {
+      onImageGenerated(imageUrl);
+      await saveGeneratedImage(currentProject?.id ?? null, prompt, cameraSettings, imageUrl);
+    }
+  };
+
+  const handleSaveProject = async () => {
+    await saveProject(projectName, {
+      camera: {
+        aperture,
+        iso,
+        shutterSpeed,
+        exposure,
+        contrast,
+        saturation,
+      },
+      prompt,
+    });
   };
 
   return (
-    <div className="camera-panel p-4 border-b border-border">
+    <div className="camera-panel p-4 border-b border-border overflow-y-auto h-full">
+      {/* Project Management */}
+      <div className="space-y-3 mb-6">
+        <div>
+          <Label htmlFor="project-name" className="text-xs text-muted-foreground font-mono">PROJECT NAME</Label>
+          <Input
+            id="project-name"
+            value={projectName}
+            onChange={(e) => setProjectName(e.target.value)}
+            className="mt-1"
+          />
+        </div>
+        <Button 
+          onClick={handleSaveProject}
+          disabled={isSaving}
+          className="w-full"
+          variant="outline"
+          size="sm"
+        >
+          {isSaving ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Saving...
+            </>
+          ) : (
+            <>
+              <Save className="mr-2 h-4 w-4" />
+              Save Project
+            </>
+          )}
+        </Button>
+      </div>
+
       <h2 className="font-semibold mb-4 text-center font-mono">CAMERA CONTROLS</h2>
       
       {/* Main Camera Settings */}
@@ -112,7 +201,7 @@ export const CameraControls = ({ activeModule, onProcessingChange }: CameraContr
           <span className="text-sm font-mono min-w-[80px]">CONTRAST</span>
           <input
             type="range"
-            min="-100"
+            min="0"
             max="100"
             step="5"
             value={contrast}
@@ -129,7 +218,7 @@ export const CameraControls = ({ activeModule, onProcessingChange }: CameraContr
           <span className="text-sm font-mono min-w-[80px]">SATURATION</span>
           <input
             type="range"
-            min="-100"
+            min="0"
             max="100"
             step="5"
             value={saturation}
@@ -142,28 +231,51 @@ export const CameraControls = ({ activeModule, onProcessingChange }: CameraContr
         </div>
       </div>
 
-      {/* AI Generation Button */}
-      <button
-        onClick={handleGenerate}
-        className="w-full camera-button p-4 rounded-lg font-mono font-semibold text-primary border-2 border-primary hover:bg-primary hover:text-primary-foreground transition-all animate-button-press"
-      >
-        <Sparkles className="inline-block mr-2" size={20} />
-        GENERATE AI IMAGE
-      </button>
+      {/* AI Prompt Input */}
+      <div className="space-y-2 mb-4">
+        <Label htmlFor="prompt" className="text-xs text-muted-foreground font-mono">AI PROMPT</Label>
+        <textarea
+          id="prompt"
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          placeholder="Describe the image you want to generate..."
+          className="w-full min-h-[80px] p-2 rounded bg-background border border-input text-sm"
+          rows={3}
+        />
+      </div>
 
       {/* Prompt Preview */}
-      <div className="mt-4">
+      <div className="mb-4">
         <h3 className="text-sm font-mono mb-2">AI PROMPT PREVIEW</h3>
         <div className="lcd-display p-3 rounded text-xs">
           <div className="text-lcd">
-            Professional photo, f/{aperture} aperture, ISO {iso}, 1/{shutterSpeed}s, 
-            {exposure !== 0 && ` ${exposure > 0 ? '+' : ''}${exposure} exposure,`}
-            {contrast !== 0 && ` ${contrast > 0 ? 'high' : 'low'} contrast,`}
-            {saturation !== 0 && ` ${saturation > 0 ? 'vibrant' : 'muted'} colors,`}
-            DSLR quality, professional lighting
+            {prompt || "Enter a prompt above"}
+            <br />
+            f/{aperture}, ISO {iso}, 1/{shutterSpeed}s
+            {exposure !== 0 && `, ${exposure > 0 ? '+' : ''}${exposure} EV`}
           </div>
         </div>
       </div>
+
+      {/* AI Generation Button */}
+      <Button
+        onClick={handleGenerate}
+        disabled={isGenerating || !prompt.trim()}
+        className="w-full font-mono font-semibold"
+        size="lg"
+      >
+        {isGenerating ? (
+          <>
+            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+            GENERATING...
+          </>
+        ) : (
+          <>
+            <Sparkles className="mr-2 h-5 w-5" />
+            GENERATE AI IMAGE
+          </>
+        )}
+      </Button>
     </div>
   );
 };

@@ -65,6 +65,41 @@ export type Database = {
         }
         Relationships: []
       }
+      generated_images: {
+        Row: {
+          camera_settings: Json
+          created_at: string
+          id: string
+          image_data: string
+          project_id: string | null
+          prompt: string
+        }
+        Insert: {
+          camera_settings?: Json
+          created_at?: string
+          id?: string
+          image_data: string
+          project_id?: string | null
+          prompt: string
+        }
+        Update: {
+          camera_settings?: Json
+          created_at?: string
+          id?: string
+          image_data?: string
+          project_id?: string | null
+          prompt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "generated_images_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       healing_actions: {
         Row: {
           action_taken: Json
@@ -248,6 +283,30 @@ export type Database = {
           priority?: number | null
           recommendation_details?: Json
           target_component?: string
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          settings: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          settings?: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          settings?: Json
+          updated_at?: string
         }
         Relationships: []
       }
