@@ -1,22 +1,31 @@
-import { useState } from "react";
-import { Eye, EyeOff, Lock, Unlock, Trash2, Plus, Image } from "lucide-react";
+import { useState, useRef } from "react";
+import { Eye, EyeOff, Lock, Unlock, Trash2, Plus, Image as ImageIcon, Upload } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 interface Layer {
   id: string;
   name: string;
   visible: boolean;
   locked: boolean;
-  type: 'background' | 'image' | 'adjustment';
+  type: 'background' | 'image' | 'adjustment' | 'reference';
+  imageData?: string;
+  isReference?: boolean;
 }
 
-export const LayersPanel = () => {
+interface LayersPanelProps {
+  onReferenceImageChange?: (imageData: string | null, enabled: boolean) => void;
+}
+
+export const LayersPanel = ({ onReferenceImageChange }: LayersPanelProps) => {
   const [layers, setLayers] = useState<Layer[]>([
     { id: '1', name: 'Background', visible: true, locked: false, type: 'background' },
-    { id: '2', name: 'Main Subject', visible: true, locked: false, type: 'image' },
-    { id: '3', name: 'Color Adjustment', visible: true, locked: false, type: 'adjustment' },
   ]);
   
-  const [selectedLayer, setSelectedLayer] = useState('2');
+  const [selectedLayer, setSelectedLayer] = useState('1');
+  const [useReferenceImage, setUseReferenceImage] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const toggleVisibility = (id: string) => {
     setLayers(layers.map(layer => 
@@ -34,27 +43,96 @@ export const LayersPanel = () => {
     setLayers(layers.filter(layer => layer.id !== id));
   };
 
-  const addLayer = () => {
+  const addLayer = (imageData?: string, isReference?: boolean) => {
     const newLayer: Layer = {
       id: Date.now().toString(),
-      name: `Layer ${layers.length + 1}`,
+      name: isReference ? 'Reference Image' : `Layer ${layers.length + 1}`,
       visible: true,
       locked: false,
-      type: 'image'
+      type: isReference ? 'reference' : 'image',
+      imageData,
+      isReference,
     };
     setLayers([...layers, newLayer]);
+    if (isReference && imageData) {
+      setSelectedLayer(newLayer.id);
+    }
+  };
+
+  const handleReferenceImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const imageData = e.target?.result as string;
+        addLayer(imageData, true);
+        if (onReferenceImageChange) {
+          onReferenceImageChange(imageData, true);
+        }
+      };
+      reader.readAsDataURL(file);
+      if (event.target) event.target.value = '';
+    }
+  };
+
+  const handleReferenceToggle = (enabled: boolean) => {
+    setUseReferenceImage(enabled);
+    const referenceLayer = layers.find(l => l.isReference);
+    if (onReferenceImageChange && referenceLayer) {
+      onReferenceImageChange(referenceLayer.imageData || null, enabled);
+    }
   };
 
   return (
-    <div className="flex-1 camera-panel p-4">
+    <div className="flex-1 camera-panel p-4 overflow-y-auto">
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-semibold font-mono">LAYERS</h2>
         <button
-          onClick={addLayer}
+          onClick={() => addLayer()}
           className="camera-button p-1 rounded"
         >
           <Plus size={16} />
         </button>
+      </div>
+
+      {/* Reference Image Section */}
+      <div className="mb-4 pb-4 border-b border-border">
+        <div className="flex items-center justify-between mb-3">
+          <Label htmlFor="use-reference" className="text-sm font-mono">USE REFERENCE IMAGE</Label>
+          <Switch
+            id="use-reference"
+            checked={useReferenceImage}
+            onCheckedChange={handleReferenceToggle}
+            disabled={!layers.some(l => l.isReference)}
+          />
+        </div>
+        
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleReferenceImageUpload}
+          className="hidden"
+        />
+        
+        <Button
+          onClick={() => fileInputRef.current?.click()}
+          variant="outline"
+          size="sm"
+          className="w-full"
+        >
+          <Upload className="mr-2 h-4 w-4" />
+          Upload Reference Image
+        </Button>
+
+        {layers.find(l => l.isReference) && (
+          <div className="mt-2 p-2 rounded border border-primary/50 bg-primary/10">
+            <div className="text-xs text-muted-foreground font-mono mb-1">REFERENCE ACTIVE</div>
+            <div className="text-xs">
+              {useReferenceImage ? 'Will be sent with prompt' : 'Disabled'}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="space-y-1">
@@ -71,8 +149,12 @@ export const LayersPanel = () => {
             onClick={() => setSelectedLayer(layer.id)}
           >
             {/* Layer Type Icon */}
-            <div className="w-8 h-8 bg-muted rounded flex items-center justify-center">
-              <Image size={14} className="text-muted-foreground" />
+            <div className={`w-8 h-8 bg-muted rounded flex items-center justify-center ${layer.isReference ? 'border border-primary' : ''}`}>
+              {layer.imageData ? (
+                <img src={layer.imageData} alt={layer.name} className="w-full h-full object-cover rounded" />
+              ) : (
+                <ImageIcon size={14} className="text-muted-foreground" />
+              )}
             </div>
 
             {/* Layer Info */}

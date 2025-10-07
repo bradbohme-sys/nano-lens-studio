@@ -1,118 +1,39 @@
 import { useState, useEffect } from "react";
-import { Aperture, Camera, Timer, Sun, Contrast, Palette, Sparkles, Save, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Aperture, Camera, Timer, Sun, Contrast, Palette } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { useImageGeneration } from "@/hooks/useImageGeneration";
-import { useProjectManagement } from "@/hooks/useProjectManagement";
 
 interface CameraControlsProps {
-  activeModule: 'editor' | 'composer' | 'settings' | 'export';
-  onProcessingChange: (processing: boolean) => void;
-  onImageGenerated: (imageUrl: string) => void;
+  aperture: number;
+  iso: number;
+  shutterSpeed: number;
+  exposure: number;
+  contrast: number;
+  saturation: number;
+  onApertureChange: (value: number) => void;
+  onIsoChange: (value: number) => void;
+  onShutterSpeedChange: (value: number) => void;
+  onExposureChange: (value: number) => void;
+  onContrastChange: (value: number) => void;
+  onSaturationChange: (value: number) => void;
 }
 
-export const CameraControls = ({ activeModule, onProcessingChange, onImageGenerated }: CameraControlsProps) => {
-  const [aperture, setAperture] = useState(2.8);
-  const [iso, setIso] = useState(400);
-  const [shutterSpeed, setShutterSpeed] = useState(60);
-  const [exposure, setExposure] = useState(0);
-  const [contrast, setContrast] = useState(50);
-  const [saturation, setSaturation] = useState(50);
-  const [prompt, setPrompt] = useState("");
-  const [projectName, setProjectName] = useState("Untitled Project");
-
-  const { isGenerating, generateImage } = useImageGeneration();
-  const { currentProject, isSaving, saveProject, saveGeneratedImage } = useProjectManagement();
-
-  useEffect(() => {
-    onProcessingChange(isGenerating);
-  }, [isGenerating, onProcessingChange]);
-
-  useEffect(() => {
-    if (currentProject) {
-      const settings = currentProject.settings;
-      if (settings.camera) {
-        setAperture(settings.camera.aperture ?? 2.8);
-        setIso(settings.camera.iso ?? 400);
-        setShutterSpeed(settings.camera.shutterSpeed ?? 60);
-        setExposure(settings.camera.exposure ?? 0);
-        setContrast(settings.camera.contrast ?? 50);
-        setSaturation(settings.camera.saturation ?? 50);
-      }
-      if (settings.prompt) {
-        setPrompt(settings.prompt);
-      }
-      setProjectName(currentProject.name);
-    }
-  }, [currentProject]);
-
-  const handleGenerate = async () => {
-    const cameraSettings = {
-      aperture,
-      iso,
-      shutterSpeed,
-      exposure,
-      contrast,
-      saturation,
-    };
-
-    const imageUrl = await generateImage(prompt, cameraSettings);
-    
-    if (imageUrl) {
-      onImageGenerated(imageUrl);
-      await saveGeneratedImage(currentProject?.id ?? null, prompt, cameraSettings, imageUrl);
-    }
-  };
-
-  const handleSaveProject = async () => {
-    await saveProject(projectName, {
-      camera: {
-        aperture,
-        iso,
-        shutterSpeed,
-        exposure,
-        contrast,
-        saturation,
-      },
-      prompt,
-    });
-  };
+export const CameraControls = ({
+  aperture,
+  iso,
+  shutterSpeed,
+  exposure,
+  contrast,
+  saturation,
+  onApertureChange,
+  onIsoChange,
+  onShutterSpeedChange,
+  onExposureChange,
+  onContrastChange,
+  onSaturationChange,
+}: CameraControlsProps) => {
 
   return (
     <div className="camera-panel p-4 border-b border-border overflow-y-auto h-full">
-      {/* Project Management */}
-      <div className="space-y-3 mb-6">
-        <div>
-          <Label htmlFor="project-name" className="text-xs text-muted-foreground font-mono">PROJECT NAME</Label>
-          <Input
-            id="project-name"
-            value={projectName}
-            onChange={(e) => setProjectName(e.target.value)}
-            className="mt-1"
-          />
-        </div>
-        <Button 
-          onClick={handleSaveProject}
-          disabled={isSaving}
-          className="w-full"
-          variant="outline"
-          size="sm"
-        >
-          {isSaving ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Saving...
-            </>
-          ) : (
-            <>
-              <Save className="mr-2 h-4 w-4" />
-              Save Project
-            </>
-          )}
-        </Button>
-      </div>
-
       <h2 className="font-semibold mb-4 text-center font-mono">CAMERA CONTROLS</h2>
       
       {/* Main Camera Settings */}
@@ -131,7 +52,7 @@ export const CameraControls = ({ activeModule, onProcessingChange, onImageGenera
             max="22"
             step="0.1"
             value={aperture}
-            onChange={(e) => setAperture(parseFloat(e.target.value))}
+            onChange={(e) => onApertureChange(parseFloat(e.target.value))}
             className="w-full mt-2 accent-primary"
           />
         </div>
@@ -150,7 +71,7 @@ export const CameraControls = ({ activeModule, onProcessingChange, onImageGenera
             max="6400"
             step="100"
             value={iso}
-            onChange={(e) => setIso(parseInt(e.target.value))}
+            onChange={(e) => onIsoChange(parseInt(e.target.value))}
             className="w-full mt-2 accent-primary"
           />
         </div>
@@ -169,7 +90,7 @@ export const CameraControls = ({ activeModule, onProcessingChange, onImageGenera
             max="1000"
             step="1"
             value={shutterSpeed}
-            onChange={(e) => setShutterSpeed(parseInt(e.target.value))}
+            onChange={(e) => onShutterSpeedChange(parseInt(e.target.value))}
             className="w-full mt-2 accent-primary"
           />
         </div>
@@ -186,7 +107,7 @@ export const CameraControls = ({ activeModule, onProcessingChange, onImageGenera
             max="2"
             step="0.1"
             value={exposure}
-            onChange={(e) => setExposure(parseFloat(e.target.value))}
+            onChange={(e) => onExposureChange(parseFloat(e.target.value))}
             className="flex-1 accent-accent"
           />
           <div className="lcd-display px-2 py-1 min-w-[50px] text-center">
@@ -205,7 +126,7 @@ export const CameraControls = ({ activeModule, onProcessingChange, onImageGenera
             max="100"
             step="5"
             value={contrast}
-            onChange={(e) => setContrast(parseInt(e.target.value))}
+            onChange={(e) => onContrastChange(parseInt(e.target.value))}
             className="flex-1 accent-accent"
           />
           <div className="lcd-display px-2 py-1 min-w-[50px] text-center">
@@ -222,7 +143,7 @@ export const CameraControls = ({ activeModule, onProcessingChange, onImageGenera
             max="100"
             step="5"
             value={saturation}
-            onChange={(e) => setSaturation(parseInt(e.target.value))}
+            onChange={(e) => onSaturationChange(parseInt(e.target.value))}
             className="flex-1 accent-accent"
           />
           <div className="lcd-display px-2 py-1 min-w-[50px] text-center">
@@ -231,51 +152,6 @@ export const CameraControls = ({ activeModule, onProcessingChange, onImageGenera
         </div>
       </div>
 
-      {/* AI Prompt Input */}
-      <div className="space-y-2 mb-4">
-        <Label htmlFor="prompt" className="text-xs text-muted-foreground font-mono">AI PROMPT</Label>
-        <textarea
-          id="prompt"
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          placeholder="Describe the image you want to generate..."
-          className="w-full min-h-[80px] p-2 rounded bg-background border border-input text-sm"
-          rows={3}
-        />
-      </div>
-
-      {/* Prompt Preview */}
-      <div className="mb-4">
-        <h3 className="text-sm font-mono mb-2">AI PROMPT PREVIEW</h3>
-        <div className="lcd-display p-3 rounded text-xs">
-          <div className="text-lcd">
-            {prompt || "Enter a prompt above"}
-            <br />
-            f/{aperture}, ISO {iso}, 1/{shutterSpeed}s
-            {exposure !== 0 && `, ${exposure > 0 ? '+' : ''}${exposure} EV`}
-          </div>
-        </div>
-      </div>
-
-      {/* AI Generation Button */}
-      <Button
-        onClick={handleGenerate}
-        disabled={isGenerating || !prompt.trim()}
-        className="w-full font-mono font-semibold"
-        size="lg"
-      >
-        {isGenerating ? (
-          <>
-            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-            GENERATING...
-          </>
-        ) : (
-          <>
-            <Sparkles className="mr-2 h-5 w-5" />
-            GENERATE AI IMAGE
-          </>
-        )}
-      </Button>
     </div>
   );
 };

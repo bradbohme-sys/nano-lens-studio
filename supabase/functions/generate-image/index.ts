@@ -11,7 +11,7 @@ serve(async (req) => {
   }
 
   try {
-    const { prompt, cameraSettings } = await req.json();
+    const { prompt, cameraSettings, referenceImage } = await req.json();
     console.log('Generating image with prompt:', prompt);
     console.log('Camera settings:', cameraSettings);
 
@@ -23,6 +23,25 @@ serve(async (req) => {
     // Build enhanced prompt based on camera settings
     const enhancedPrompt = buildEnhancedPrompt(prompt, cameraSettings);
     console.log('Enhanced prompt:', enhancedPrompt);
+    console.log('Has reference image:', !!referenceImage);
+
+    // Build message content
+    const messageContent: any[] = [
+      {
+        type: 'text',
+        text: enhancedPrompt,
+      }
+    ];
+
+    // Add reference image if provided
+    if (referenceImage) {
+      messageContent.push({
+        type: 'image_url',
+        image_url: {
+          url: referenceImage,
+        }
+      });
+    }
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -35,7 +54,7 @@ serve(async (req) => {
         messages: [
           {
             role: 'user',
-            content: enhancedPrompt
+            content: messageContent,
           }
         ],
         modalities: ['image', 'text']

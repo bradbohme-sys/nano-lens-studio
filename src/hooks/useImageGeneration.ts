@@ -7,7 +7,7 @@ export const useImageGeneration = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
 
-  const generateImage = async (prompt: string, cameraSettings: CameraSettings) => {
+  const generateImage = async (prompt: string, cameraSettings: CameraSettings, referenceImage?: string | null) => {
     if (!prompt.trim()) {
       toast.error('Please enter a prompt');
       return null;
@@ -18,7 +18,8 @@ export const useImageGeneration = () => {
       const { data, error } = await supabase.functions.invoke('generate-image', {
         body: { 
           prompt,
-          cameraSettings 
+          cameraSettings,
+          referenceImage
         }
       });
 
