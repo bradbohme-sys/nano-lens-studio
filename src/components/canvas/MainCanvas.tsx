@@ -5,9 +5,10 @@ import { CanvasOverlays } from "./CanvasOverlays";
 interface MainCanvasProps {
   activeTool: string;
   isProcessing: boolean;
+  generatedImageUrl?: string | null;
 }
 
-export const MainCanvas = ({ activeTool, isProcessing }: MainCanvasProps) => {
+export const MainCanvas = ({ activeTool, isProcessing, generatedImageUrl }: MainCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [hasImage, setHasImage] = useState(false);
@@ -104,6 +105,32 @@ export const MainCanvas = ({ activeTool, isProcessing }: MainCanvasProps) => {
   const handleDragLeave = () => {
     setIsDragOver(false);
   };
+
+  // Load generated image to canvas
+  useEffect(() => {
+    if (!generatedImageUrl) return;
+    
+    const img = new Image();
+    img.onload = () => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      
+      const scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+      const x = (canvas.width - img.width * scale) / 2;
+      const y = (canvas.height - img.height * scale) / 2;
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+      setHasImage(true);
+    };
+    img.src = generatedImageUrl;
+  }, [generatedImageUrl]);
 
   return (
     <div 

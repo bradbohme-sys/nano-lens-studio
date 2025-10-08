@@ -34,7 +34,7 @@ export const DSLRInterface = () => {
     enabled: false 
   });
 
-  const { isGenerating, generateImage } = useImageGeneration();
+  const { isGenerating, generateImage, generatedImage } = useImageGeneration();
   const { currentProject, saveGeneratedImage } = useProjectManagement();
 
   const handleGenerate = async () => {
@@ -130,6 +130,7 @@ export const DSLRInterface = () => {
           <MainCanvas 
             activeTool={activeTool}
             isProcessing={isGenerating}
+            generatedImageUrl={generatedImage}
           />
           
           {/* Bottom Status Bar */}
