@@ -8,7 +8,9 @@ import {
   Mountain, 
   Lightbulb,
   FolderOpen,
-  FileText
+  FileText,
+  Wand2,
+  Lasso
 } from "lucide-react";
 
 interface RightPanelNavProps {
@@ -25,6 +27,9 @@ export const RightPanelNav = ({ activePanel, onPanelChange }: RightPanelNavProps
     { id: 'style', icon: Palette, label: 'Style' },
     { id: 'effects', icon: Sparkles, label: 'Effects' },
     { id: 'layers', icon: Layers, label: 'Layers' },
+    { id: 'ai-tools', icon: Wand2, label: 'AI Tools' },
+    { id: 'selection', icon: Wand2, label: 'Selection' },
+    { id: 'lasso', icon: Lasso, label: 'Lasso' },
     { id: 'prompt-preview', icon: FileText, label: 'Prompt Preview' },
     { id: 'projects', icon: FolderOpen, label: 'Projects' },
     { id: 'settings', icon: Settings, label: 'Settings' },

@@ -14,6 +14,11 @@ import { ScenePanel } from "./panels/ScenePanel";
 import { LightingPanel } from "./panels/LightingPanel";
 import { ProjectsPanel } from "./panels/ProjectsPanel";
 import { PromptPreviewPanel } from "./panels/PromptPreviewPanel";
+import { EnhancedLayersPanel } from "./panels/EnhancedLayersPanel";
+import { SpecialLayersBar } from "./panels/SpecialLayersBar";
+import { AIToolsPanel } from "./panels/AIToolsPanel";
+import { SelectionTools } from "./tools/SelectionTools";
+import { LassoTool } from "./tools/LassoTool";
 import { useImageGeneration } from "@/hooks/useImageGeneration";
 import { useProjectManagement } from "@/hooks/useProjectManagement";
 
@@ -147,6 +152,8 @@ export const DSLRInterface = () => {
             onPanelChange={setActivePanel}
           />
           
+          <SpecialLayersBar />
+          
           <div className="w-72 flex flex-col">
             {activePanel === 'camera' && (
               <CameraControls 
@@ -167,7 +174,10 @@ export const DSLRInterface = () => {
             {activePanel === 'character' && <CharacterPanel />}
             {activePanel === 'scene' && <ScenePanel />}
             {activePanel === 'lighting' && <LightingPanel />}
-            {activePanel === 'layers' && <LayersPanel onReferenceImageChange={handleReferenceImageChange} />}
+            {activePanel === 'layers' && <EnhancedLayersPanel onReferenceImageChange={handleReferenceImageChange} />}
+            {activePanel === 'ai-tools' && <AIToolsPanel onGenerate={handleGenerate} />}
+            {activePanel === 'selection' && <SelectionTools />}
+            {activePanel === 'lasso' && <LassoTool />}
             {activePanel === 'prompt-preview' && (
               <PromptPreviewPanel 
                 cameraSettings={{ aperture, iso, shutterSpeed, exposure, contrast, saturation }}
