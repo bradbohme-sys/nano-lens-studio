@@ -47,6 +47,12 @@ export const EnhancedLayersPanel = ({ onReferenceImageChange }: EnhancedLayersPa
   ]);
   const [selectedLayer, setSelectedLayer] = useState<string>('1');
   const [expandedModifiers, setExpandedModifiers] = useState<Record<string, boolean>>({});
+  
+  const updateMaskColor = (id: string, color: string) => {
+    setLayers(layers.map(layer => 
+      layer.id === id ? { ...layer, maskColor: color } : layer
+    ));
+  };
 
   const toggleVisibility = (id: string) => {
     setLayers(layers.map(layer => 
@@ -178,10 +184,28 @@ export const EnhancedLayersPanel = ({ onReferenceImageChange }: EnhancedLayersPa
                   <Button
                     size="sm"
                     variant="ghost"
+                    onClick={(e) => { e.stopPropagation(); toggleMaskVisibility(layer.id); }}
+                    className="h-6 w-6 p-0"
+                    title="Toggle mask visibility"
+                  >
+                    <Eye className={`h-3 w-3 ${layer.maskVisible ? 'text-primary' : 'text-muted-foreground'}`} />
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
                     onClick={(e) => { e.stopPropagation(); toggleLock(layer.id); }}
                     className="h-6 w-6 p-0"
                   >
                     {layer.locked ? <Lock className="h-3 w-3" /> : <Unlock className="h-3 w-3" />}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={(e) => { e.stopPropagation(); }}
+                    className="h-6 w-6 p-0"
+                    title="Layer settings"
+                  >
+                    <Settings className="h-3 w-3" />
                   </Button>
                   <Button
                     size="sm"

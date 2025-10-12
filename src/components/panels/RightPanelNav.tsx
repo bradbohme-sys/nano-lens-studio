@@ -10,7 +10,9 @@ import {
   FolderOpen,
   FileText,
   Wand2,
-  Lasso
+  Lasso,
+  ZoomIn,
+  Microscope
 } from "lucide-react";
 
 interface RightPanelNavProps {
@@ -24,15 +26,15 @@ export const RightPanelNav = ({ activePanel, onPanelChange }: RightPanelNavProps
     { id: 'character', icon: User, label: 'Character' },
     { id: 'scene', icon: Mountain, label: 'Scene' },
     { id: 'lighting', icon: Lightbulb, label: 'Lighting' },
-    { id: 'style', icon: Palette, label: 'Style' },
-    { id: 'effects', icon: Sparkles, label: 'Effects' },
     { id: 'layers', icon: Layers, label: 'Layers' },
     { id: 'ai-tools', icon: Wand2, label: 'AI Tools' },
     { id: 'selection', icon: Wand2, label: 'Selection' },
     { id: 'lasso', icon: Lasso, label: 'Lasso' },
+    { id: 'cursor-zoom', icon: ZoomIn, label: 'Cursor Zoom' },
+    { id: 'microscope', icon: Microscope, label: 'Microscope' },
+    { id: 'color-sphere', icon: Palette, label: 'Color Sphere' },
     { id: 'prompt-preview', icon: FileText, label: 'Prompt Preview' },
     { id: 'projects', icon: FolderOpen, label: 'Projects' },
-    { id: 'settings', icon: Settings, label: 'Settings' },
   ];
 
   return (

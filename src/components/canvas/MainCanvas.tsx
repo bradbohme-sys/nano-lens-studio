@@ -6,10 +6,12 @@ interface MainCanvasProps {
   activeTool: string;
   isProcessing: boolean;
   generatedImageUrl?: string | null;
+  canvasRef?: React.RefObject<HTMLCanvasElement>;
 }
 
-export const MainCanvas = ({ activeTool, isProcessing, generatedImageUrl }: MainCanvasProps) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+export const MainCanvas = ({ activeTool, isProcessing, generatedImageUrl, canvasRef: externalCanvasRef }: MainCanvasProps) => {
+  const internalCanvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = externalCanvasRef || internalCanvasRef;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [hasImage, setHasImage] = useState(false);
   const [zoom, setZoom] = useState(100);
