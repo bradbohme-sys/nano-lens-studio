@@ -11,6 +11,7 @@ import { RightPanelNav } from "./panels/RightPanelNav";
 import { CharacterPanel } from "./panels/CharacterPanel";
 import { ScenePanel } from "./panels/ScenePanel";
 import { LightingPanel } from "./panels/LightingPanel";
+import { ImageGenerationDrawer } from "./panels/ImageGenerationDrawer";
 import { ProjectsPanel } from "./panels/ProjectsPanel";
 import { PromptPreviewPanel } from "./panels/PromptPreviewPanel";
 import { EnhancedLayersPanel } from "./panels/EnhancedLayersPanel";
