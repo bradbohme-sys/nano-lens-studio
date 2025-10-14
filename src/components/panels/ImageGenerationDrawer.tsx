@@ -53,9 +53,22 @@ type CompositionLayer = SketchLayer | ReferenceLayer;
 
 const SKETCH_COLORS = ['RED', 'BLUE', 'GREEN', 'YELLOW', 'PURPLE', 'ORANGE'];
 
-export const ImageGenerationDrawer = () => {
+interface ImageGenerationDrawerProps {
+  onGenerate?: () => void;
+  cameraSettings?: {
+    aperture: number;
+    iso: number;
+    shutterSpeed: number;
+    exposure: number;
+    contrast: number;
+    saturation: number;
+  };
+  prompt?: string;
+}
+
+export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: ImageGenerationDrawerProps) => {
   const [open, setOpen] = useState(false);
-  const [basePrompt, setBasePrompt] = useState("");
+  const [basePrompt, setBasePrompt] = useState(prompt || "");
   const [layers, setLayers] = useState<CompositionLayer[]>([]);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [complexity, setComplexity] = useState(0);
@@ -63,9 +76,9 @@ export const ImageGenerationDrawer = () => {
 
   // Camera settings
   const [lens, setLens] = useState("50mm");
-  const [aperture, setAperture] = useState("f/1.8");
-  const [shutterSpeed, setShutterSpeed] = useState("1/125s");
-  const [iso, setIso] = useState("400");
+  const [aperture, setAperture] = useState(cameraSettings ? `f/${cameraSettings.aperture}` : "f/1.8");
+  const [shutterSpeed, setShutterSpeed] = useState(cameraSettings ? `1/${cameraSettings.shutterSpeed}` : "1/125s");
+  const [iso, setIso] = useState(cameraSettings ? String(cameraSettings.iso) : "400");
   const [aspectRatio, setAspectRatio] = useState("16:9");
   const [enforceAspectRatio, setEnforceAspectRatio] = useState(true);
 
@@ -163,7 +176,10 @@ export const ImageGenerationDrawer = () => {
     
     assemblePrompt();
     toast.success("Generating image with composed prompt...");
-    // Integration point for actual generation
+    
+    if (onGenerate) {
+      onGenerate();
+    }
   };
 
   return (

@@ -109,6 +109,13 @@ export const DSLRInterface = () => {
           </div>
         </div>
       </div>
+
+      {/* Floating ICE Drawer Button */}
+      <ImageGenerationDrawer 
+        onGenerate={handleGenerate}
+        cameraSettings={{ aperture, iso, shutterSpeed, exposure, contrast, saturation }}
+        prompt={prompt}
+      />
     </div>
   );
 };
