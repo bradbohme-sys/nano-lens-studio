@@ -212,16 +212,46 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
         </button>
       </DrawerTrigger>
       
-      <DrawerContent className="max-h-[90vh] bg-[hsl(var(--camera-body))] border-none">
+      <DrawerContent className="h-[92vh] bg-camera-body border-none p-0">
         {/* DSLR Camera Body Container */}
-        <div className="mx-auto w-full max-w-7xl">
+        <div className="relative mx-auto w-full max-w-6xl camera-body rounded-2xl border border-border">
+          {/* Decorative screws */}
+          <div className="absolute left-3 top-3 w-2 h-2 rounded-full bg-background/40 border border-border" />
+          <div className="absolute right-3 top-3 w-2 h-2 rounded-full bg-background/40 border border-border" />
+          <div className="absolute left-3 bottom-[88px] w-2 h-2 rounded-full bg-background/40 border border-border" />
+          <div className="absolute right-3 bottom-[88px] w-2 h-2 rounded-full bg-background/40 border border-border" />
+
+          {/* Strap lugs */}
+          <div className="absolute -left-3 top-10 w-4 h-6 rounded-md border border-border bg-background/30" />
+          <div className="absolute -right-3 top-10 w-4 h-6 rounded-md border border-border bg-background/30" />
+
+          {/* Top prism/EVF hump */}
+          <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-72 h-16 camera-panel rounded-b-2xl border border-border">
+            <div className="absolute inset-x-10 top-2 h-10 rounded-xl lcd-display flex items-center justify-center">
+              <span className="text-lcd text-[10px] tracking-widest">ELECTRONIC VIEWFINDER</span>
+            </div>
+          </div>
+
+          {/* Right button column */}
+          <div className="pointer-events-none absolute right-3 top-28 flex flex-col gap-2">
+            <div className="camera-button pointer-events-auto w-8 h-8 rounded-full border border-border" />
+            <div className="camera-button pointer-events-auto w-8 h-8 rounded-full border border-border" />
+            <div className="camera-button pointer-events-auto w-8 h-8 rounded-full border border-border" />
+          </div>
+
+          {/* Thumb wheel */}
+          <div className="absolute right-20 top-20 camera-dial w-16 h-16 rounded-full" />
+
+          {/* Left grip */}
+          <div className="absolute left-0 top-24 h-[60%] w-10 rounded-r-2xl border-r border-border bg-gradient-to-r from-background to-transparent" />
+
           {/* Camera Top Bezel */}
-          <div className="relative bg-gradient-to-b from-[hsl(0_0%_18%)] via-[hsl(0_0%_12%)] to-[hsl(0_0%_10%)] border-b-2 border-[hsl(0_0%_8%)] px-6 py-3">
+          <div className="relative camera-panel border-b border-border px-6 py-3 rounded-t-2xl">
             {/* Camera Model & Status Bar */}
             <div className="flex items-center justify-between">
               {/* Left: Model Name */}
               <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2 px-3 py-1 rounded bg-[hsl(0_0%_8%)] border border-[hsl(0_0%_20%)] shadow-recessed">
+                <div className="flex items-center gap-2 px-3 py-1 rounded bg-background border border-border">
                   <Camera className="h-4 w-4 text-primary" />
                   <span className="text-lcd text-xs font-bold tracking-wider">ICE-7D</span>
                 </div>
@@ -232,22 +262,22 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
               </div>
 
               {/* Center: Mode Display */}
-              <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-1.5 rounded-md bg-gradient-to-br from-[hsl(0_100%_45%)] to-[hsl(0_100%_35%)] shadow-[0_2px_8px_rgba(255,0,0,0.4)]">
+              <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-1.5 rounded-md bg-primary shadow">
                 <Sparkles className="h-4 w-4 text-white" />
                 <span className="text-white text-sm font-bold tracking-wide">COMPOSITION MODE</span>
               </div>
 
               {/* Right: Status Indicators */}
               <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1 px-2 py-1 rounded bg-[hsl(0_0%_8%)] border border-[hsl(0_0%_20%)]">
+                <div className="flex items-center gap-1 px-2 py-1 rounded bg-background border border-border">
                   <BatteryFull className="h-3 w-3 text-accent" />
                   <span className="text-lcd text-[10px]">100%</span>
                 </div>
-                <div className="flex items-center gap-1 px-2 py-1 rounded bg-[hsl(0_0%_8%)] border border-[hsl(0_0%_20%)]">
+                <div className="flex items-center gap-1 px-2 py-1 rounded bg-background border border-border">
                   <HardDrive className="h-3 w-3 text-accent" />
                   <span className="text-lcd text-[10px]">999</span>
                 </div>
-                <div className="flex items-center gap-1 px-2 py-1 rounded bg-[hsl(0_0%_8%)] border border-[hsl(0_0%_20%)]">
+                <div className="flex items-center gap-1 px-2 py-1 rounded bg-background border border-border">
                   <Zap className="h-3 w-3 text-[hsl(var(--lcd-amber))]" />
                   <span className="text-lcd-amber text-[10px]">AUTO</span>
                 </div>
@@ -257,11 +287,11 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
 
           {/* Main LCD Screen */}
           <div className="lcd-display p-1">
-            <ScrollArea className="h-[calc(90vh-280px)]">
+            <ScrollArea className="h-[calc(92vh-280px)]">
               <div className="px-6 py-4 space-y-6">
                 {/* Base Prompt - Camera Style */}
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between px-3 py-1.5 bg-[hsl(0_0%_8%)] rounded border border-[hsl(0_0%_25%)]">
+                  <div className="flex items-center justify-between px-3 py-1.5 bg-background rounded border border-border">
                     <div className="flex items-center gap-2">
                       <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                       <span className="text-lcd text-xs uppercase tracking-widest font-bold">Creative Brief</span>
@@ -275,11 +305,11 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
                       updateComplexity(layers.length);
                     }}
                     placeholder="Enter your creative vision: mood, style, composition..."
-                    className="min-h-[90px] bg-[hsl(220_20%_8%)] border-2 border-[hsl(0_0%_20%)] text-[hsl(var(--lcd-text))] placeholder:text-[hsl(var(--muted-foreground))] font-mono text-sm shadow-recessed focus:shadow-[inset_0_2px_8px_rgba(0,0,0,0.8),0_0_0_2px_hsl(var(--primary))] transition-all resize-none"
+                    className="min-h-[90px] bg-background border-2 border-border text-[hsl(var(--lcd-text))] placeholder:text-[hsl(var(--muted-foreground))] font-mono text-sm shadow-recessed focus:shadow-[inset_0_2px_8px_rgba(0,0,0,0.8),0_0_0_2px_hsl(var(--primary))] transition-all resize-none"
                   />
                 </div>
 
-                <Separator className="bg-[hsl(0_0%_20%)]" />
+                <Separator className="bg-border" />
 
                 {/* Control Buttons - Physical Button Style */}
                 <div className="grid grid-cols-2 gap-3">
@@ -287,7 +317,7 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
                     onClick={addReferenceLayer}
                     className="group relative overflow-hidden"
                   >
-                    <div className="camera-button px-4 py-3 flex items-center justify-center gap-2 border-2 border-[hsl(0_0%_30%)] hover:border-primary transition-all">
+                    <div className="camera-button px-4 py-3 flex items-center justify-center gap-2 border-2 border-border hover:border-primary transition-all">
                       <ImageIcon className="h-4 w-4 text-accent group-hover:scale-110 transition-transform" />
                       <span className="text-lcd text-xs font-bold uppercase tracking-wide">Add Reference</span>
                     </div>
@@ -296,7 +326,7 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
                     onClick={addSketchLayer}
                     className="group relative overflow-hidden"
                   >
-                    <div className="camera-button px-4 py-3 flex items-center justify-center gap-2 border-2 border-[hsl(0_0%_30%)] hover:border-primary transition-all">
+                    <div className="camera-button px-4 py-3 flex items-center justify-center gap-2 border-2 border-border hover:border-primary transition-all">
                       <Paintbrush className="h-4 w-4 text-accent group-hover:scale-110 transition-transform" />
                       <span className="text-lcd text-xs font-bold uppercase tracking-wide">Add Sketch</span>
                     </div>
@@ -305,68 +335,55 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
 
                 {/* Composition Stack */}
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between px-3 py-1.5 bg-[hsl(0_0%_8%)] rounded border border-[hsl(0_0%_25%)]">
+                  <div className="flex items-center justify-between px-3 py-1.5 bg-background rounded border border-border">
                     <div className="flex items-center gap-2">
                       <div className="w-1.5 h-1.5 rounded-full bg-accent" />
                       <span className="text-lcd text-xs uppercase tracking-widest font-bold">Layer Stack</span>
                     </div>
                     <span className="text-lcd text-[10px]">{layers.length} LAYERS</span>
                   </div>
-                  
                   {layers.map((layer, index) => (
-                    <div key={layer.id} className="relative bg-gradient-to-br from-[hsl(0_0%_15%)] to-[hsl(0_0%_10%)] border-2 border-[hsl(0_0%_25%)] rounded-lg p-4 shadow-camera">
+                    <div key={layer.id} className="relative bg-background border-2 border-border rounded-lg p-4">
                       {/* Layer Number Badge */}
-                      <div className="absolute -top-2 -left-2 w-6 h-6 rounded-full bg-gradient-to-br from-primary to-[hsl(0_100%_35%)] border-2 border-[hsl(0_0%_8%)] flex items-center justify-center shadow-[0_2px_8px_rgba(255,0,0,0.5)]">
+                      <div className="absolute -top-2 -left-2 w-6 h-6 rounded-full bg-primary border-2 border-border flex items-center justify-center">
                         <span className="text-white text-xs font-bold">{index + 1}</span>
                       </div>
-                      
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             {layer.type === 'reference' ? (
                               <>
-                                <div className="p-2 rounded bg-[hsl(0_0%_8%)] border border-[hsl(0_0%_30%)]">
+                                <div className="p-2 rounded bg-background border border-border">
                                   <ImageIcon className="h-4 w-4 text-accent" />
                                 </div>
                                 <span className="text-lcd font-bold text-sm">{layer.name}</span>
                               </>
                             ) : (
                               <>
-                                <div className="p-2 rounded bg-[hsl(0_0%_8%)] border border-[hsl(0_0%_30%)]">
+                                <div className="p-2 rounded bg-background border border-border">
                                   <Paintbrush className="h-4 w-4 text-accent" />
                                 </div>
                                 <span className="text-lcd font-bold text-sm">Sketch ({layer.color})</span>
-                                <div 
-                                  className="w-4 h-4 rounded-full border-2 border-[hsl(0_0%_40%)] shadow-[0_0_8px_currentColor]"
-                                  style={{ 
-                                    backgroundColor: layer.color.toLowerCase() === 'red' ? '#ef4444' :
+                                <div className="w-4 h-4 rounded-full border-2 border-border" style={{ backgroundColor: layer.color.toLowerCase() === 'red' ? '#ef4444' :
                                                    layer.color.toLowerCase() === 'blue' ? '#3b82f6' :
                                                    layer.color.toLowerCase() === 'green' ? '#22c55e' :
                                                    layer.color.toLowerCase() === 'yellow' ? '#eab308' :
-                                                   layer.color.toLowerCase() === 'purple' ? '#a855f7' : '#f97316',
-                                    boxShadow: `0 0 12px ${layer.color.toLowerCase() === 'red' ? '#ef4444' :
-                                                   layer.color.toLowerCase() === 'blue' ? '#3b82f6' :
-                                                   layer.color.toLowerCase() === 'green' ? '#22c55e' :
-                                                   layer.color.toLowerCase() === 'yellow' ? '#eab308' :
-                                                   layer.color.toLowerCase() === 'purple' ? '#a855f7' : '#f97316'}`
-                                  }}
-                                />
+                                                   layer.color.toLowerCase() === 'purple' ? '#a855f7' : '#f97316' }} />
                               </>
                             )}
                           </div>
                           <div className="flex gap-2">
-                            <button className="camera-button h-8 w-8 p-0 flex items-center justify-center border border-[hsl(0_0%_30%)] hover:border-accent transition-colors">
+                            <button className="camera-button h-8 w-8 p-0 flex items-center justify-center border border-border hover:border-accent transition-colors">
                               <Edit3 className="h-3 w-3 text-accent" />
                             </button>
                             <button 
-                              className="camera-button h-8 w-8 p-0 flex items-center justify-center border border-[hsl(0_0%_30%)] hover:border-destructive transition-colors"
+                              className="camera-button h-8 w-8 p-0 flex items-center justify-center border border-border hover:border-destructive transition-colors"
                               onClick={() => removeLayer(layer.id)}
                             >
                               <Trash2 className="h-3 w-3 text-destructive" />
                             </button>
                           </div>
                         </div>
-
                         <div className="space-y-2">
                           <Input
                             placeholder="Layer instruction..."
@@ -377,20 +394,19 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
                               );
                               setLayers(newLayers);
                             }}
-                            className="bg-[hsl(220_20%_8%)] border border-[hsl(0_0%_25%)] text-[hsl(var(--lcd-text))] placeholder:text-[hsl(var(--muted-foreground))] font-mono text-xs shadow-recessed focus:border-primary transition-colors"
+                            className="bg-background border border-border text-[hsl(var(--lcd-text))] placeholder:text-[hsl(var(--muted-foreground))] font-mono text-xs"
                           />
-                          
                           {layer.type === 'reference' && (
                             <Input
                               placeholder="Negative (avoid)..."
-                              value={layer.negativePrompt}
+                              value={(layer as any).negativePrompt}
                               onChange={(e) => {
                                 const newLayers = layers.map(l => 
-                                  l.id === layer.id ? { ...l, negativePrompt: e.target.value } : l
+                                  l.id === layer.id ? { ...l, negativePrompt: (e.target as any).value } : l
                                 );
                                 setLayers(newLayers);
                               }}
-                              className="bg-[hsl(220_20%_8%)] border border-[hsl(0_0%_25%)] text-[hsl(var(--lcd-amber))] placeholder:text-[hsl(var(--muted-foreground))] font-mono text-xs shadow-recessed focus:border-destructive transition-colors"
+                              className="bg-background border border-border text-[hsl(var(--lcd-amber))] placeholder:text-[hsl(var(--muted-foreground))] font-mono text-xs"
                             />
                           )}
                         </div>
@@ -399,13 +415,13 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
                   ))}
                 </div>
 
-                <Separator className="bg-[hsl(0_0%_20%)]" />
+                <Separator className="bg-border" />
 
                 {/* Advanced Settings */}
                 <div className="space-y-3">
                   <button
                     onClick={() => setAdvancedOpen(!advancedOpen)}
-                    className="w-full camera-button px-4 py-2 flex items-center justify-between border-2 border-[hsl(0_0%_25%)] hover:border-accent transition-colors"
+                    className="w-full camera-button px-4 py-2 flex items-center justify-between border-2 border-border hover:border-accent transition-colors"
                   >
                     <div className="flex items-center gap-2">
                       <Settings2 className="h-4 w-4 text-accent" />
@@ -415,19 +431,19 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
                   </button>
 
                   {advancedOpen && (
-                    <div className="bg-gradient-to-br from-[hsl(0_0%_12%)] to-[hsl(0_0%_8%)] rounded-lg p-5 border-2 border-[hsl(0_0%_20%)] shadow-recessed space-y-4">
+                    <div className="bg-background rounded-lg p-5 border-2 border-border space-y-4">
                       {/* Camera Controls - Pro Style */}
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <div className="flex items-center gap-2 px-2 py-1 bg-[hsl(0_0%_8%)] rounded border border-[hsl(0_0%_25%)]">
+                          <div className="flex items-center gap-2 px-2 py-1 bg-background rounded border border-border">
                             <Aperture className="h-3 w-3 text-accent" />
                             <span className="text-lcd text-[10px] uppercase tracking-widest">Lens</span>
                           </div>
                           <Select value={lens} onValueChange={setLens}>
-                            <SelectTrigger className="bg-[hsl(220_20%_8%)] border-2 border-[hsl(0_0%_25%)] text-lcd font-mono text-xs shadow-recessed hover:border-accent transition-colors">
+                            <SelectTrigger className="bg-background border-2 border-border text-lcd font-mono text-xs">
                               <SelectValue />
                             </SelectTrigger>
-                            <SelectContent className="bg-[hsl(0_0%_10%)] border-2 border-[hsl(0_0%_25%)]">
+                            <SelectContent className="bg-background border-2 border-border">
                               <SelectItem value="24mm" className="text-lcd font-mono">24mm Wide</SelectItem>
                               <SelectItem value="35mm" className="text-lcd font-mono">35mm</SelectItem>
                               <SelectItem value="50mm" className="text-lcd font-mono">50mm Standard</SelectItem>
@@ -436,17 +452,16 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
                             </SelectContent>
                           </Select>
                         </div>
-
                         <div className="space-y-2">
-                          <div className="flex items-center gap-2 px-2 py-1 bg-[hsl(0_0%_8%)] rounded border border-[hsl(0_0%_25%)]">
+                          <div className="flex items-center gap-2 px-2 py-1 bg-background rounded border border-border">
                             <Circle className="h-3 w-3 text-accent" />
                             <span className="text-lcd text-[10px] uppercase tracking-widest">Aperture</span>
                           </div>
                           <Select value={aperture} onValueChange={setAperture}>
-                            <SelectTrigger className="bg-[hsl(220_20%_8%)] border-2 border-[hsl(0_0%_25%)] text-lcd font-mono text-xs shadow-recessed hover:border-accent transition-colors">
+                            <SelectTrigger className="bg-background border-2 border-border text-lcd font-mono text-xs">
                               <SelectValue />
                             </SelectTrigger>
-                            <SelectContent className="bg-[hsl(0_0%_10%)] border-2 border-[hsl(0_0%_25%)]">
+                            <SelectContent className="bg-background border-2 border-border">
                               <SelectItem value="f/1.4" className="text-lcd font-mono">f/1.4 - Wide Open</SelectItem>
                               <SelectItem value="f/1.8" className="text-lcd font-mono">f/1.8</SelectItem>
                               <SelectItem value="f/2.8" className="text-lcd font-mono">f/2.8</SelectItem>
@@ -455,17 +470,16 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
                             </SelectContent>
                           </Select>
                         </div>
-
                         <div className="space-y-2">
-                          <div className="flex items-center gap-2 px-2 py-1 bg-[hsl(0_0%_8%)] rounded border border-[hsl(0_0%_25%)]">
+                          <div className="flex items-center gap-2 px-2 py-1 bg-background rounded border border-border">
                             <Zap className="h-3 w-3 text-accent" />
                             <span className="text-lcd text-[10px] uppercase tracking-widest">Shutter</span>
                           </div>
                           <Select value={shutterSpeed} onValueChange={setShutterSpeed}>
-                            <SelectTrigger className="bg-[hsl(220_20%_8%)] border-2 border-[hsl(0_0%_25%)] text-lcd font-mono text-xs shadow-recessed hover:border-accent transition-colors">
+                            <SelectTrigger className="bg-background border-2 border-border text-lcd font-mono text-xs">
                               <SelectValue />
                             </SelectTrigger>
-                            <SelectContent className="bg-[hsl(0_0%_10%)] border-2 border-[hsl(0_0%_25%)]">
+                            <SelectContent className="bg-background border-2 border-border">
                               <SelectItem value="1/30s" className="text-lcd font-mono">1/30s - Motion Blur</SelectItem>
                               <SelectItem value="1/60s" className="text-lcd font-mono">1/60s</SelectItem>
                               <SelectItem value="1/125s" className="text-lcd font-mono">1/125s</SelectItem>
@@ -474,17 +488,16 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
                             </SelectContent>
                           </Select>
                         </div>
-
                         <div className="space-y-2">
-                          <div className="flex items-center gap-2 px-2 py-1 bg-[hsl(0_0%_8%)] rounded border border-[hsl(0_0%_25%)]">
+                          <div className="flex items-center gap-2 px-2 py-1 bg-background rounded border border-border">
                             <Sparkles className="h-3 w-3 text-accent" />
                             <span className="text-lcd text-[10px] uppercase tracking-widest">ISO</span>
                           </div>
                           <Select value={iso} onValueChange={setIso}>
-                            <SelectTrigger className="bg-[hsl(220_20%_8%)] border-2 border-[hsl(0_0%_25%)] text-lcd font-mono text-xs shadow-recessed hover:border-accent transition-colors">
+                            <SelectTrigger className="bg-background border-2 border-border text-lcd font-mono text-xs">
                               <SelectValue />
                             </SelectTrigger>
-                            <SelectContent className="bg-[hsl(0_0%_10%)] border-2 border-[hsl(0_0%_25%)]">
+                            <SelectContent className="bg-background border-2 border-border">
                               <SelectItem value="100" className="text-lcd font-mono">ISO 100 - Bright</SelectItem>
                               <SelectItem value="200" className="text-lcd font-mono">ISO 200</SelectItem>
                               <SelectItem value="400" className="text-lcd font-mono">ISO 400</SelectItem>
@@ -495,19 +508,19 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
                         </div>
                       </div>
 
-                      <Separator className="bg-[hsl(0_0%_25%)]" />
+                      <Separator className="bg-border" />
 
                       {/* Aspect Ratio */}
                       <div className="space-y-3">
-                        <div className="flex items-center gap-2 px-2 py-1 bg-[hsl(0_0%_8%)] rounded border border-[hsl(0_0%_25%)]">
+                        <div className="flex items-center gap-2 px-2 py-1 bg-background rounded border border-border">
                           <div className="w-3 h-2 border border-accent rounded-sm" />
                           <span className="text-lcd text-[10px] uppercase tracking-widest">Frame Ratio</span>
                         </div>
                         <Select value={aspectRatio} onValueChange={setAspectRatio}>
-                          <SelectTrigger className="bg-[hsl(220_20%_8%)] border-2 border-[hsl(0_0%_25%)] text-lcd font-mono text-xs shadow-recessed hover:border-accent transition-colors">
+                          <SelectTrigger className="bg-background border-2 border-border text-lcd font-mono text-xs">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent className="bg-[hsl(0_0%_10%)] border-2 border-[hsl(0_0%_25%)]">
+                          <SelectContent className="bg-background border-2 border-border">
                             <SelectItem value="1:1" className="text-lcd font-mono">1:1 Square</SelectItem>
                             <SelectItem value="4:3" className="text-lcd font-mono">4:3 Standard</SelectItem>
                             <SelectItem value="16:9" className="text-lcd font-mono">16:9 Widescreen</SelectItem>
@@ -515,8 +528,7 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
                             <SelectItem value="9:16" className="text-lcd font-mono">9:16 Portrait</SelectItem>
                           </SelectContent>
                         </Select>
-                        
-                        <div className="flex items-center justify-between px-3 py-2 bg-[hsl(0_0%_8%)] rounded border border-[hsl(0_0%_25%)]">
+                        <div className="flex items-center justify-between px-3 py-2 bg-background rounded border border-border">
                           <span className="text-lcd text-[10px] uppercase tracking-wide">Lock Ratio</span>
                           <Switch
                             checked={enforceAspectRatio}
@@ -529,32 +541,30 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
                   )}
                 </div>
 
-                <Separator className="bg-[hsl(0_0%_20%)]" />
+                <Separator className="bg-border" />
 
                 {/* Analysis & Final Prompt */}
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between px-3 py-1.5 bg-[hsl(0_0%_8%)] rounded border border-[hsl(0_0%_25%)]">
+                  <div className="flex items-center justify-between px-3 py-1.5 bg-background rounded border border-border">
                     <div className="flex items-center gap-2">
                       <Sparkles className="h-3 w-3 text-[hsl(var(--lcd-amber))]" />
                       <span className="text-lcd text-xs uppercase tracking-widest font-bold">AI Analysis</span>
                     </div>
                   </div>
-                  
                   <button 
                     onClick={analyzePrompt}
-                    className="w-full camera-button px-4 py-3 flex items-center justify-center gap-2 border-2 border-[hsl(0_0%_25%)] hover:border-[hsl(var(--lcd-amber))] transition-colors group"
+                    className="w-full camera-button px-4 py-3 flex items-center justify-center gap-2 border-2 border-border hover:border-[hsl(var(--lcd-amber))] transition-colors group"
                   >
                     <Sparkles className="h-4 w-4 text-[hsl(var(--lcd-amber))] group-hover:scale-110 transition-transform" />
                     <span className="text-lcd text-sm font-bold uppercase tracking-wide">Run AI Co-Pilot</span>
                   </button>
-
-                  {/* Complexity Meter - Professional Style */}
-                  <div className="space-y-2 p-3 bg-[hsl(0_0%_8%)] rounded border border-[hsl(0_0%_25%)]">
+                  {/* Complexity Meter */}
+                  <div className="space-y-2 p-3 bg-background rounded border border-border">
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-lcd text-[10px] uppercase tracking-widest">Complexity</span>
                       <span className="text-lcd text-xs font-bold">{complexity}%</span>
                     </div>
-                    <div className="relative h-3 bg-[hsl(0_0%_5%)] rounded-full overflow-hidden border border-[hsl(0_0%_20%)] shadow-recessed">
+                    <div className="relative h-3 bg-background rounded-full overflow-hidden border border-border">
                       <div 
                         className="absolute inset-y-0 left-0 transition-all duration-500 rounded-full"
                         style={{ 
@@ -563,15 +573,13 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
                             ? 'linear-gradient(90deg, hsl(var(--lcd-amber)), hsl(0 100% 50%))'
                             : complexity > 50
                             ? 'linear-gradient(90deg, hsl(var(--lcd-amber)), hsl(var(--lcd-text)))'
-                            : 'linear-gradient(90deg, hsl(var(--accent)), hsl(var(--lcd-text)))',
-                          boxShadow: `0 0 10px ${complexity > 80 ? 'hsl(0 100% 50% / 0.6)' : 'hsl(var(--accent) / 0.4)'}`
+                            : 'linear-gradient(90deg, hsl(var(--accent)), hsl(var(--lcd-text)))'
                         }}
                       />
                     </div>
                   </div>
-
                   {assembledPrompt && (
-                    <div className="bg-gradient-to-br from-[hsl(0_0%_12%)] to-[hsl(0_0%_8%)] rounded-lg p-4 border-2 border-[hsl(0_0%_20%)] shadow-recessed">
+                    <div className="bg-background rounded-lg p-4 border-2 border-border">
                       <div className="flex items-center gap-2 mb-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
                         <span className="text-lcd text-[10px] uppercase tracking-widest font-bold">Final Prompt</span>
@@ -587,32 +595,29 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
           </div>
 
           {/* Bottom Control Panel - Physical Camera Buttons */}
-          <div className="relative bg-gradient-to-b from-[hsl(0_0%_15%)] to-[hsl(0_0%_10%)] border-t-2 border-[hsl(0_0%_25%)] px-6 py-4">
+          <div className="relative camera-panel border-t border-border px-6 py-4 rounded-b-2xl">
             <div className="flex items-center gap-4">
               {/* Function Buttons */}
-              <button className="camera-button p-2 border border-[hsl(0_0%_30%)] rounded hover:border-accent transition-colors" title="Reset">
+              <button className="camera-button p-2 border border-border rounded" title="Reset">
                 <RotateCcw className="h-4 w-4 text-accent" />
               </button>
-              
-              <button className="camera-button p-2 border border-[hsl(0_0%_30%)] rounded hover:border-accent transition-colors" title="Info">
+              <button className="camera-button p-2 border border-border rounded" title="Info">
                 <Info className="h-4 w-4 text-accent" />
               </button>
-
               {/* Main Shutter Button */}
               <button 
                 onClick={handleGenerate}
                 className="flex-1 group relative overflow-hidden"
               >
-                <div className="relative bg-gradient-to-br from-primary to-[hsl(0_100%_35%)] px-8 py-4 rounded-lg border-2 border-primary shadow-[0_4px_16px_rgba(255,0,0,0.5),inset_0_2px_4px_rgba(255,255,255,0.2)] hover:shadow-[0_6px_20px_rgba(255,0,0,0.7),inset_0_2px_4px_rgba(255,255,255,0.3)] active:shadow-[inset_0_4px_12px_rgba(0,0,0,0.6)] transition-all duration-150 group-active:scale-95">
+                <div className="relative bg-primary px-8 py-4 rounded-lg border-2 border-primary hover:brightness-110 active:brightness-90 transition-all duration-150 group-active:scale-95">
                   <div className="flex items-center justify-center gap-3">
-                    <Camera className="h-6 w-6 text-white drop-shadow-lg" />
-                    <span className="text-white text-xl font-bold uppercase tracking-widest drop-shadow-lg">GENERATE</span>
+                    <Camera className="h-6 w-6 text-white" />
+                    <span className="text-white text-xl font-bold uppercase tracking-widest">GENERATE</span>
                   </div>
                 </div>
               </button>
-
               <DrawerClose asChild>
-                <button className="camera-button px-4 py-2 border-2 border-[hsl(0_0%_30%)] rounded hover:border-destructive transition-colors">
+                <button className="camera-button px-4 py-2 border-2 border-border rounded">
                   <span className="text-lcd text-xs font-bold uppercase tracking-wide">Close</span>
                 </button>
               </DrawerClose>
