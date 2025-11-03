@@ -20,6 +20,7 @@ import {
   Sun,
   Droplet,
   Zap,
+  Settings2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -148,6 +149,7 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [complexity, setComplexity] = useState(0);
   const [assembledPrompt, setAssembledPrompt] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const [lens, setLens] = useState("50mm");
   const [aperture, setAperture] = useState(cameraSettings ? `f/${cameraSettings.aperture}` : "f/1.8");
@@ -226,9 +228,15 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
       toast.error("Add a base prompt first");
       return;
     }
+    setIsGenerating(true);
     assemblePrompt();
     toast.success("Generating image...");
     if (onGenerate) onGenerate();
+    
+    // Reset after 2 seconds
+    setTimeout(() => {
+      setIsGenerating(false);
+    }, 2000);
   };
 
   return (
@@ -671,105 +679,148 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
               </div>
 
               {/* Right Control Panel - D-Pad & Buttons */}
-              <div className="w-32 border-l border-white/10 p-4 flex flex-col items-center gap-8"
+              <div className="w-40 border-l border-white/10 p-4 flex flex-col items-center gap-6"
                    style={{ 
                      background: 'linear-gradient(90deg, #1a1a1a 0%, #0f0f0f 50%, #1a1a1a 100%)',
                      boxShadow: 'inset 3px 0 8px rgba(0,0,0,0.5)'
                    }}>
                 
-                {/* Mode Dial */}
-                <div className="relative w-20 h-20">
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#3a3a3a] via-[#2a2a2a] to-[#1a1a1a] border-2 border-white/10"
-                       style={{ 
-                         background: 'url(#knurledDial)',
-                         boxShadow: '0 4px 12px rgba(0,0,0,0.6), inset 0 -2px 6px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.1)'
-                       }} />
-                  <div className="absolute inset-3 rounded-full bg-gradient-to-br from-black to-[#1a1a1a] border border-white/20 flex items-center justify-center">
-                    <span className="text-white text-xs font-bold">M</span>
+                {/* Mode Dial - Enhanced Realism */}
+                <div className="relative w-24 h-24 rounded-full bg-gradient-to-b from-[#3a3a3a] via-[#2a2a2a] to-[#1a1a1a] shadow-[inset_0_2px_4px_rgba(0,0,0,0.6),0_2px_0_rgba(255,255,255,0.1),0_4px_12px_rgba(0,0,0,0.5)] border-2 border-white/20">
+                  {/* Knurled edge texture */}
+                  <div className="absolute inset-0 rounded-full opacity-40" style={{ background: 'url("data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cdefs%3E%3Cpattern id=\'ridges\' width=\'3\' height=\'100\' patternUnits=\'userSpaceOnUse\'%3E%3Crect x=\'0\' width=\'1\' height=\'100\' fill=\'rgba(255,255,255,0.15)\'/%3E%3Crect x=\'1\' width=\'1\' height=\'100\' fill=\'rgba(0,0,0,0.15)\'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\'100\' height=\'100\' fill=\'url(%23ridges)\'/%3E%3C/svg%3E")' }} />
+                  
+                  <div className="absolute inset-2 rounded-full bg-gradient-to-b from-[#0a0a0a] to-[#000000] shadow-[inset_0_2px_8px_rgba(0,0,0,0.9),0_1px_0_rgba(255,255,255,0.05)]" />
+                  <div className="absolute inset-0 flex items-center justify-center z-10">
+                    <Settings2 className="w-7 h-7 text-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.6)]" />
                   </div>
-                  {/* Dial Indicator */}
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-3 bg-red-500 rounded-b" />
+                  {/* Dial indicator with embossing */}
+                  <div className="absolute top-0.5 left-1/2 -translate-x-1/2 w-1.5 h-4 bg-gradient-to-b from-red-500 to-red-700 rounded-full shadow-[0_0_6px_rgba(239,68,68,0.9),inset_0_1px_0_rgba(255,255,255,0.3)]" />
+                  {/* Mode markings */}
+                  <div className="absolute inset-0">
+                    {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
+                      <div
+                        key={i}
+                        className="absolute w-0.5 h-1 bg-white/30"
+                        style={{
+                          top: '8px',
+                          left: '50%',
+                          transform: `translateX(-50%) rotate(${angle}deg)`,
+                          transformOrigin: '50% 40px',
+                        }}
+                      />
+                    ))}
+                  </div>
                 </div>
                 
-                {/* Function Buttons */}
+                {/* Function Buttons - Enhanced */}
                 <div className="flex flex-col gap-3">
                   {[Menu, Grid3x3, Play].map((Icon, i) => (
                     <button key={i} 
-                            className="w-10 h-10 rounded-full bg-gradient-to-br from-[#2a2a2a] to-[#1a1a1a] border border-white/10 flex items-center justify-center hover:border-cyan-500/50 transition-colors active:scale-95"
-                            style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.6), inset 0 1px rgba(255,255,255,0.08)' }}>
-                      <Icon className="w-4 h-4 text-cyan-400/80" />
+                            className="relative w-12 h-12 rounded-lg bg-gradient-to-b from-[#3a3a3a] via-[#2a2a2a] to-[#1a1a1a] shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_3px_6px_rgba(0,0,0,0.6),0_1px_0_rgba(255,255,255,0.08)] border-2 border-white/20 hover:shadow-[0_5px_10px_rgba(0,0,0,0.7)] active:shadow-[inset_0_3px_6px_rgba(0,0,0,0.7)] active:translate-y-0.5 transition-all group">
+                      <div className="absolute inset-0.5 rounded opacity-30" style={{ background: 'url("data:image/svg+xml,%3Csvg width=\'50\' height=\'50\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cdefs%3E%3Cpattern id=\'dots\' width=\'3\' height=\'3\' patternUnits=\'userSpaceOnUse\'%3E%3Ccircle cx=\'1.5\' cy=\'1.5\' r=\'0.4\' fill=\'rgba(255,255,255,0.15)\'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\'50\' height=\'50\' fill=\'url(%23dots)\'/%3E%3C/svg%3E")' }} />
+                      <Icon className="relative w-5 h-5 mx-auto text-cyan-400/80 group-hover:text-cyan-300 transition-colors" />
                     </button>
                   ))}
                 </div>
                 
-                {/* D-Pad Navigation Cluster */}
-                <div className="relative w-24 h-24">
-                  {/* Up */}
-                  <button className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-8 rounded-t-lg bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 flex items-center justify-center hover:bg-[#3a3a3a] active:scale-95"
-                          style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.6), inset 0 1px rgba(255,255,255,0.05)' }}>
-                    <ChevronUp className="w-4 h-4 text-white/60" />
+                {/* D-Pad Navigation Cluster - Enhanced */}
+                <div className="relative w-28 h-28">
+                  {/* Center SET button - Enhanced */}
+                  <button className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-gradient-to-b from-[#4a4a4a] via-[#2a2a2a] to-[#1a1a1a] shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_3px_6px_rgba(0,0,0,0.6),0_1px_0_rgba(255,255,255,0.1)] border-2 border-white/25 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_4px_10px_rgba(0,0,0,0.7)] active:shadow-[inset_0_3px_6px_rgba(0,0,0,0.7)] active:translate-y-0.5 transition-all z-10">
+                    <div className="absolute inset-2 rounded-full bg-[#0a0a0a] shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)]" />
+                    <span className="relative text-[11px] text-cyan-400 font-bold tracking-widest drop-shadow-[0_0_4px_rgba(34,211,238,0.5)]">SET</span>
                   </button>
-                  {/* Down */}
-                  <button className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-8 rounded-b-lg bg-gradient-to-t from-[#2a2a2a] to-[#1a1a1a] border border-white/10 flex items-center justify-center hover:bg-[#3a3a3a] active:scale-95"
-                          style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.6), inset 0 1px rgba(255,255,255,0.05)' }}>
-                    <ChevronDown className="w-4 h-4 text-white/60" />
+
+                  {/* Up button - Enhanced */}
+                  <button className="absolute top-0 left-1/2 -translate-x-1/2 w-11 h-12 rounded-t-2xl bg-gradient-to-b from-[#3a3a3a] via-[#2a2a2a] to-[#1a1a1a] shadow-[0_2px_0_rgba(255,255,255,0.08),0_4px_8px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] hover:shadow-[0_6px_12px_rgba(0,0,0,0.6)] active:shadow-[inset_0_3px_6px_rgba(0,0,0,0.7)] active:translate-y-0.5 transition-all border-t-2 border-x-2 border-white/15">
+                    <ChevronUp className="w-5 h-5 mx-auto mt-1 text-white/70 group-hover:text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
+                    <div className="absolute top-1 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-white/10 rounded-full" />
                   </button>
-                  {/* Left */}
-                  <button className="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 rounded-l-lg bg-gradient-to-r from-[#2a2a2a] to-[#1a1a1a] border border-white/10 flex items-center justify-center hover:bg-[#3a3a3a] active:scale-95"
-                          style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.6), inset 0 1px rgba(255,255,255,0.05)' }}>
-                    <ChevronLeft className="w-4 h-4 text-white/60" />
+
+                  {/* Right button - Enhanced */}
+                  <button className="absolute right-0 top-1/2 -translate-y-1/2 w-12 h-11 rounded-r-2xl bg-gradient-to-r from-[#2a2a2a] via-[#1a1a1a] to-[#0a0a0a] shadow-[0_2px_0_rgba(255,255,255,0.08),0_4px_8px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] hover:shadow-[0_6px_12px_rgba(0,0,0,0.6)] active:shadow-[inset_0_3px_6px_rgba(0,0,0,0.7)] active:translate-x-0.5 transition-all border-r-2 border-y-2 border-white/15">
+                    <ChevronRight className="w-5 h-5 mx-auto text-white/70 group-hover:text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
+                    <div className="absolute right-1 top-1/2 -translate-y-1/2 h-4 w-0.5 bg-white/10 rounded-full" />
                   </button>
-                  {/* Right */}
-                  <button className="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-8 rounded-r-lg bg-gradient-to-l from-[#2a2a2a] to-[#1a1a1a] border border-white/10 flex items-center justify-center hover:bg-[#3a3a3a] active:scale-95"
-                          style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.6), inset 0 1px rgba(255,255,255,0.05)' }}>
-                    <ChevronRight className="w-4 h-4 text-white/60" />
+
+                  {/* Down button - Enhanced */}
+                  <button className="absolute bottom-0 left-1/2 -translate-x-1/2 w-11 h-12 rounded-b-2xl bg-gradient-to-b from-[#1a1a1a] via-[#0a0a0a] to-[#000000] shadow-[0_2px_0_rgba(255,255,255,0.08),0_4px_8px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] hover:shadow-[0_6px_12px_rgba(0,0,0,0.6)] active:shadow-[inset_0_3px_6px_rgba(0,0,0,0.7)] active:translate-y-0.5 transition-all border-b-2 border-x-2 border-white/15">
+                    <ChevronDown className="w-5 h-5 mx-auto mb-1 text-white/70 group-hover:text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
+                    <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-white/10 rounded-full" />
                   </button>
-                  {/* Center OK Button */}
-                  <button className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-gradient-to-br from-[#3a3a3a] via-[#2a2a2a] to-[#1a1a1a] border-2 border-white/20 flex items-center justify-center hover:border-cyan-400/50 active:scale-95"
-                          style={{ boxShadow: '0 3px 8px rgba(0,0,0,0.7), inset 0 1px 2px rgba(255,255,255,0.1)' }}>
-                    <span className="text-white text-xs font-bold">OK</span>
+
+                  {/* Left button - Enhanced */}
+                  <button className="absolute left-0 top-1/2 -translate-y-1/2 w-12 h-11 rounded-l-2xl bg-gradient-to-l from-[#2a2a2a] via-[#1a1a1a] to-[#0a0a0a] shadow-[0_2px_0_rgba(255,255,255,0.08),0_4px_8px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] hover:shadow-[0_6px_12px_rgba(0,0,0,0.6)] active:shadow-[inset_0_3px_6px_rgba(0,0,0,0.7)] active:translate-x-0.5 transition-all border-l-2 border-y-2 border-white/15">
+                    <ChevronLeft className="w-5 h-5 mx-auto text-white/70 group-hover:text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
+                    <div className="absolute left-1 top-1/2 -translate-y-1/2 h-4 w-0.5 bg-white/10 rounded-full" />
                   </button>
                 </div>
               </div>
             </div>
 
-            {/* Bottom Control Bar - Physical Buttons */}
-            <div className="px-8 py-6 border-t border-white/10"
+            {/* Bottom Control Bar - Professional Camera Controls */}
+            <div className="flex items-center justify-between px-8 py-6 border-t border-white/10"
                  style={{ 
                    background: 'url(#brushedMetal)',
                    boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.5), inset 0 -1px 2px rgba(255,255,255,0.05)'
                  }}>
-              <div className="flex items-center gap-6">
-                {/* Info Button */}
-                <button className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#2a2a2a] to-[#1a1a1a] border border-white/10 flex items-center justify-center hover:border-cyan-500/50 transition-colors active:scale-95"
-                        style={{ boxShadow: '0 3px 8px rgba(0,0,0,0.6), inset 0 1px rgba(255,255,255,0.08)' }}>
-                  <span className="text-cyan-400 text-xs font-bold">INFO</span>
-                </button>
+              {/* Left Button - INFO */}
+              <button
+                className="group relative w-16 h-16 rounded-full bg-gradient-to-b from-[#2a2a2a] via-[#1a1a1a] to-[#0a0a0a] shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_2px_4px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.05)] border border-white/10 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_3px_6px_rgba(0,0,0,0.6),0_1px_0_rgba(255,255,255,0.08)] active:shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)] active:translate-y-0.5 transition-all"
+              >
+                <div className="absolute inset-0 rounded-full" style={{ background: 'url("data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cdefs%3E%3Cpattern id=\'knurl\' width=\'4\' height=\'4\' patternUnits=\'userSpaceOnUse\'%3E%3Ccircle cx=\'2\' cy=\'2\' r=\'0.5\' fill=\'rgba(255,255,255,0.03)\'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\'100\' height=\'100\' fill=\'url(%23knurl)\'/%3E%3C/svg%3E")' }} />
+                <span className="relative z-10 text-cyan-400 text-[11px] font-bold tracking-widest group-hover:text-cyan-300 transition-colors">INFO</span>
+              </button>
+              
+              {/* Center Button - SHUTTER/GENERATE (AF-ON Style) */}
+              <button
+                onClick={handleGenerate}
+                disabled={isGenerating}
+                className="group relative w-28 h-28 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {/* Main button body */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-b from-[#8B0000] via-[#660000] to-[#4a0000] shadow-[0_6px_0_#2a0000,0_8px_16px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.2)] group-hover:shadow-[0_6px_0_#2a0000,0_10px_20px_rgba(139,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.3)] group-active:shadow-[0_2px_0_#2a0000,0_4px_8px_rgba(0,0,0,0.6),inset_0_2px_4px_rgba(0,0,0,0.4)] group-active:translate-y-1 transition-all border-2 border-[#a00000]" />
                 
-                {/* Main Generate/Shutter Button */}
-                <button 
-                  onClick={handleGenerate}
-                  className="flex-1 group relative overflow-hidden rounded-xl"
+                {/* Metallic ring */}
+                <div className="absolute inset-2 rounded-full bg-gradient-to-b from-[#3a3a3a] to-[#1a1a1a] shadow-[inset_0_2px_4px_rgba(0,0,0,0.8),0_1px_0_rgba(255,255,255,0.1)]" />
+                
+                {/* Inner red glow */}
+                <div className="absolute inset-4 rounded-full bg-gradient-to-b from-red-500/20 to-red-700/40 shadow-[inset_0_2px_8px_rgba(220,38,38,0.6)]" />
+                
+                {/* Knurled texture */}
+                <div className="absolute inset-0 rounded-full opacity-30" style={{ background: 'url("data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cdefs%3E%3Cpattern id=\'diamond\' width=\'6\' height=\'6\' patternUnits=\'userSpaceOnUse\' patternTransform=\'rotate(45)\'%3E%3Crect width=\'1\' height=\'6\' fill=\'rgba(255,255,255,0.1)\'/%3E%3Crect width=\'6\' height=\'1\' fill=\'rgba(255,255,255,0.1)\'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\'100\' height=\'100\' fill=\'url(%23diamond)\'/%3E%3C/svg%3E")' }} />
+                
+                {/* Center icon/text */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+                  {isGenerating ? (
+                    <>
+                      <Camera className="w-8 h-8 text-white animate-pulse mb-1" />
+                      <span className="text-[10px] text-white font-bold tracking-widest">CAPTURE</span>
+                    </>
+                  ) : (
+                    <>
+                      <div className="w-7 h-7 rounded-full border-3 border-white mb-1 shadow-[0_0_10px_rgba(255,255,255,0.6)]" />
+                      <span className="text-[10px] text-white font-bold tracking-widest drop-shadow-lg">SHOOT</span>
+                    </>
+                  )}
+                </div>
+                
+                {/* Highlight gleam */}
+                <div className="absolute top-3 left-5 w-6 h-6 rounded-full bg-gradient-to-br from-white/20 to-transparent pointer-events-none" />
+              </button>
+
+              {/* Right Button - MENU/CLOSE */}
+              <DrawerClose asChild>
+                <button
+                  className="group relative w-16 h-16 rounded-full bg-gradient-to-b from-[#2a2a2a] via-[#1a1a1a] to-[#0a0a0a] shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_2px_4px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.05)] border border-white/10 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_3px_6px_rgba(0,0,0,0.6),0_1px_0_rgba(255,255,255,0.08)] active:shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)] active:translate-y-0.5 transition-all"
                 >
-                  <div className="relative px-12 py-5 bg-gradient-to-br from-red-600 via-red-700 to-red-800 rounded-xl border-2 border-red-400/30 hover:from-red-500 hover:via-red-600 hover:to-red-700 active:scale-98 transition-all duration-200"
-                       style={{ 
-                         boxShadow: '0 6px 20px rgba(220,38,38,0.5), inset 0 1px 2px rgba(255,100,100,0.3), inset 0 -3px 8px rgba(100,0,0,0.4)'
-                       }}>
-                    <div className="flex items-center justify-center gap-4">
-                      <Camera className="w-7 h-7 text-white drop-shadow-lg" strokeWidth={2.5} />
-                      <span className="text-white text-2xl font-bold tracking-[0.3em] uppercase drop-shadow-lg">GENERATE</span>
-                    </div>
+                  <div className="absolute inset-0 rounded-full" style={{ background: 'url("data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cdefs%3E%3Cpattern id=\'knurl2\' width=\'4\' height=\'4\' patternUnits=\'userSpaceOnUse\'%3E%3Ccircle cx=\'2\' cy=\'2\' r=\'0.5\' fill=\'rgba(255,255,255,0.03)\'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\'100\' height=\'100\' fill=\'url(%23knurl2)\'/%3E%3C/svg%3E")' }} />
+                  <div className="relative z-10 w-full h-full flex flex-col items-center justify-center cursor-pointer">
+                    <Menu className="w-5 h-5 text-white/70 group-hover:text-white/90 transition-colors" />
                   </div>
                 </button>
-                
-                {/* Close Button */}
-                <DrawerClose asChild>
-                  <button className="px-6 py-3 rounded-lg bg-gradient-to-br from-[#2a2a2a] to-[#1a1a1a] border border-white/10 hover:border-white/30 transition-colors active:scale-95"
-                          style={{ boxShadow: '0 3px 8px rgba(0,0,0,0.6), inset 0 1px rgba(255,255,255,0.08)' }}>
-                    <span className="text-white text-sm font-bold tracking-wide uppercase">CLOSE</span>
-                  </button>
-                </DrawerClose>
-              </div>
+              </DrawerClose>
             </div>
             
           </div>
