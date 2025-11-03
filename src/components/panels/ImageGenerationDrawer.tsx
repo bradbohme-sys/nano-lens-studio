@@ -21,6 +21,10 @@ import {
   Droplet,
   Zap,
   Settings2,
+  Layers,
+  Focus,
+  Circle,
+  Grid,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,33 +41,57 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 
-// SVG Texture Patterns for Photorealistic Camera Body
+// SVG Texture Patterns for Ultra-Realistic Camera Body
 const CameraTextures = () => (
   <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true">
     <defs>
-      {/* Rubber Grip Texture - Raised Dots Pattern */}
-      <pattern id="rubberGrip" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse">
-        <rect width="12" height="12" fill="#0f0f0f"/>
-        <circle cx="3" cy="3" r="1.5" fill="#1a1a1a" opacity="0.7"/>
-        <circle cx="9" cy="3" r="1.5" fill="#1a1a1a" opacity="0.7"/>
-        <circle cx="3" cy="9" r="1.5" fill="#1a1a1a" opacity="0.7"/>
-        <circle cx="9" cy="9" r="1.5" fill="#1a1a1a" opacity="0.7"/>
-        <circle cx="6" cy="6" r="1.3" fill="#0a0a0a" opacity="0.9"/>
+      {/* Dark Rubber Grip Texture - 3D Raised Dots */}
+      <pattern id="rubberGrip" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+        <rect width="10" height="10" fill="#080808"/>
+        <circle cx="2.5" cy="2.5" r="1.8" fill="#0d0d0d" opacity="0.8"/>
+        <circle cx="7.5" cy="2.5" r="1.8" fill="#0d0d0d" opacity="0.8"/>
+        <circle cx="2.5" cy="7.5" r="1.8" fill="#0d0d0d" opacity="0.8"/>
+        <circle cx="7.5" cy="7.5" r="1.8" fill="#0d0d0d" opacity="0.8"/>
+        <circle cx="5" cy="5" r="1.6" fill="#050505" opacity="0.95"/>
+        {/* Highlight dots for 3D effect */}
+        <circle cx="2" cy="2" r="0.4" fill="#1a1a1a" opacity="0.6"/>
+        <circle cx="7" cy="2" r="0.4" fill="#1a1a1a" opacity="0.6"/>
+        <circle cx="2" cy="7" r="0.4" fill="#1a1a1a" opacity="0.6"/>
+        <circle cx="7" cy="7" r="0.4" fill="#1a1a1a" opacity="0.6"/>
       </pattern>
       
-      {/* Brushed Metal Texture - Horizontal Lines */}
-      <pattern id="brushedMetal" x="0" y="0" width="120" height="3" patternUnits="userSpaceOnUse">
-        <rect width="120" height="3" fill="#2d2d2d"/>
-        <line x1="0" y1="0" x2="120" y2="0" stroke="#3a3a3a" strokeWidth="0.5" opacity="0.4"/>
-        <line x1="0" y1="1.5" x2="120" y2="1.5" stroke="#222" strokeWidth="0.5" opacity="0.6"/>
-        <line x1="0" y1="3" x2="120" y2="3" stroke="#3a3a3a" strokeWidth="0.5" opacity="0.3"/>
+      {/* Carbon Fiber Texture */}
+      <pattern id="carbonFiber" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
+        <rect width="6" height="6" fill="#0a0a0a"/>
+        <rect x="0" y="0" width="3" height="3" fill="#111" opacity="0.4"/>
+        <rect x="3" y="3" width="3" height="3" fill="#111" opacity="0.4"/>
+        <rect x="0" y="0" width="3" height="3" stroke="#1a1a1a" strokeWidth="0.5" fill="none" opacity="0.3"/>
+        <rect x="3" y="3" width="3" height="3" stroke="#1a1a1a" strokeWidth="0.5" fill="none" opacity="0.3"/>
       </pattern>
       
-      {/* Knurled Dial Texture - Diamond Pattern */}
-      <pattern id="knurledDial" x="0" y="0" width="4" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
-        <rect width="4" height="8" fill="#2a2a2a"/>
-        <line x1="2" y1="0" x2="2" y2="8" stroke="#3a3a3a" strokeWidth="0.8"/>
-        <line x1="0" y1="4" x2="4" y2="4" stroke="#1a1a1a" strokeWidth="0.5" opacity="0.6"/>
+      {/* Dark Brushed Metal - Horizontal Lines */}
+      <pattern id="brushedMetal" x="0" y="0" width="100" height="2" patternUnits="userSpaceOnUse">
+        <rect width="100" height="2" fill="#1a1a1a"/>
+        <line x1="0" y1="0" x2="100" y2="0" stroke="#2a2a2a" strokeWidth="0.5" opacity="0.5"/>
+        <line x1="0" y1="1" x2="100" y2="1" stroke="#0f0f0f" strokeWidth="0.5" opacity="0.7"/>
+        <line x1="0" y1="2" x2="100" y2="2" stroke="#2a2a2a" strokeWidth="0.5" opacity="0.4"/>
+      </pattern>
+      
+      {/* Fine Knurled Pattern - Diamond Grid */}
+      <pattern id="knurledFine" x="0" y="0" width="3" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+        <rect width="3" height="6" fill="#1a1a1a"/>
+        <line x1="1.5" y1="0" x2="1.5" y2="6" stroke="#2a2a2a" strokeWidth="0.6"/>
+        <line x1="0" y1="3" x2="3" y2="3" stroke="#0f0f0f" strokeWidth="0.4" opacity="0.7"/>
+      </pattern>
+      
+      {/* Matte Black Metal Grain */}
+      <pattern id="matteBlack" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+        <rect width="50" height="50" fill="#0d0d0d"/>
+        <circle cx="10" cy="10" r="0.3" fill="#1a1a1a" opacity="0.3"/>
+        <circle cx="25" cy="15" r="0.2" fill="#0a0a0a" opacity="0.4"/>
+        <circle cx="40" cy="20" r="0.3" fill="#1a1a1a" opacity="0.2"/>
+        <circle cx="15" cy="35" r="0.2" fill="#0a0a0a" opacity="0.3"/>
+        <circle cx="30" cy="40" r="0.3" fill="#1a1a1a" opacity="0.3"/>
       </pattern>
       
       {/* LCD Grain Effect */}
@@ -76,12 +104,12 @@ const CameraTextures = () => (
         <feBlend mode="soft-light" in="SourceGraphic"/>
       </filter>
       
-      {/* Button Emboss/Depth Effect */}
+      {/* Deep Button Emboss - Enhanced 3D */}
       <filter id="buttonEmboss">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="1.5"/>
-        <feOffset dx="0" dy="1.5" result="offsetBlur"/>
+        <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+        <feOffset dx="0" dy="2" result="offsetBlur"/>
         <feComponentTransfer>
-          <feFuncA type="linear" slope="0.35"/>
+          <feFuncA type="linear" slope="0.5"/>
         </feComponentTransfer>
         <feMerge>
           <feMergeNode/>
@@ -89,13 +117,13 @@ const CameraTextures = () => (
         </feMerge>
       </filter>
       
-      {/* Inner Shadow for Recessed Elements */}
+      {/* Strong Inner Shadow */}
       <filter id="insetShadow">
         <feComponentTransfer in="SourceAlpha">
           <feFuncA type="table" tableValues="1 0"/>
         </feComponentTransfer>
-        <feGaussianBlur stdDeviation="2"/>
-        <feOffset dx="0" dy="2" result="offsetblur"/>
+        <feGaussianBlur stdDeviation="3"/>
+        <feOffset dx="0" dy="3" result="offsetblur"/>
         <feFlood floodColor="#000000" result="color"/>
         <feComposite in2="offsetblur" operator="in"/>
         <feComposite in2="SourceAlpha" operator="in"/>
@@ -247,24 +275,39 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
           <button 
             className="fixed bottom-8 right-8 z-50 group"
             aria-label="Open ICE Camera"
-            style={{ filter: 'drop-shadow(0 10px 30px rgba(0,0,0,0.6))' }}
+            style={{ filter: 'drop-shadow(0 12px 35px rgba(0,0,0,0.8))' }}
           >
-            {/* Hyper-Realistic Shutter Button */}
-            <div className="relative w-24 h-24">
-              {/* Outer Chrome Ring with Reflection */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#4a4a4a] via-[#2a2a2a] to-[#1a1a1a] shadow-[0_10px_25px_rgba(0,0,0,0.7),inset_0_1px_3px_rgba(255,255,255,0.15),inset_0_-2px_6px_rgba(0,0,0,0.5)]" 
+            {/* Ultra-Realistic DSLR Shutter Button */}
+            <div className="relative w-28 h-28">
+              {/* Base Mounting Plate - Dark Metal */}
+              <div className="absolute inset-0 rounded-full bg-[#0a0a0a] shadow-[0_0_0_4px_#1a1a1a,0_0_0_5px_#0d0d0d,0_12px_30px_rgba(0,0,0,0.9)]" />
+              
+              {/* Outer Chrome Ring - Beveled Edge */}
+              <div className="absolute inset-[6px] rounded-full bg-gradient-to-br from-[#5a5a5a] via-[#2a2a2a] to-[#0d0d0d] shadow-[inset_0_2px_4px_rgba(255,255,255,0.15),inset_0_-3px_8px_rgba(0,0,0,0.7),0_2px_0_rgba(255,255,255,0.1)]" 
                    style={{ filter: 'url(#buttonEmboss)' }} />
               
-              {/* Red Shutter Button */}
-              <div className="absolute inset-[8px] rounded-full bg-gradient-to-br from-[#ff4444] via-[#dd0000] to-[#aa0000] shadow-[0_6px_18px_rgba(255,0,0,0.6),inset_0_2px_4px_rgba(255,100,100,0.4),inset_0_-3px_8px_rgba(100,0,0,0.6)] flex items-center justify-center group-hover:from-[#ff5555] group-hover:via-[#ee1111] group-active:shadow-[inset_0_6px_12px_rgba(0,0,0,0.8)] group-active:scale-95 transition-all duration-150">
-                <Camera className="w-8 h-8 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" strokeWidth={2.5} />
+              {/* Middle Ring - Brushed Metal */}
+              <div className="absolute inset-[12px] rounded-full" 
+                   style={{ 
+                     background: 'url(#brushedMetal)',
+                     boxShadow: 'inset 0 3px 6px rgba(0,0,0,0.8), inset 0 -1px 2px rgba(255,255,255,0.08)'
+                   }} />
+              
+              {/* Red Shutter Button - Deep 3D */}
+              <div className="absolute inset-[18px] rounded-full bg-gradient-to-b from-[#cc0000] via-[#990000] to-[#660000] shadow-[0_4px_0_#440000,0_6px_20px_rgba(220,0,0,0.8),inset_0_2px_6px_rgba(255,80,80,0.5),inset_0_-2px_8px_rgba(60,0,0,0.9)] flex items-center justify-center group-hover:from-[#dd1111] group-hover:via-[#aa0000] group-hover:shadow-[0_4px_0_#440000,0_8px_25px_rgba(255,0,0,0.9),inset_0_2px_6px_rgba(255,100,100,0.6)] group-active:shadow-[0_1px_0_#440000,inset_0_6px_16px_rgba(0,0,0,0.95)] group-active:translate-y-[3px] transition-all duration-100">
+                {/* Knurled Texture Overlay */}
+                <div className="absolute inset-0 rounded-full opacity-20" style={{ background: 'url(#knurledFine)' }} />
+                <Camera className="relative w-9 h-9 text-white drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)]" strokeWidth={2.8} />
               </div>
               
-              {/* Highlight Gleam */}
-              <div className="absolute top-[12px] left-[12px] w-[18px] h-[18px] rounded-full bg-gradient-to-br from-white/40 to-transparent pointer-events-none" />
+              {/* Top-Left Highlight Gleam */}
+              <div className="absolute top-[16px] left-[18px] w-[22px] h-[22px] rounded-full bg-gradient-to-br from-white/35 to-transparent pointer-events-none blur-[1px]" />
               
-              {/* Pulse Animation Ring */}
-              <div className="absolute inset-0 rounded-full border-2 border-red-500/30 animate-ping" />
+              {/* Ready Indicator Ring */}
+              <div className="absolute inset-0 rounded-full border-[3px] border-red-500/20 group-hover:border-red-400/40 transition-all" />
+              
+              {/* Subtle Pulse Animation */}
+              <div className="absolute inset-0 rounded-full border-2 border-red-500/20 animate-ping" style={{ animationDuration: '3s' }} />
             </div>
           </button>
         </DrawerTrigger>
@@ -319,15 +362,78 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
             {/* Main Camera Body Container */}
             <div className="flex-1 flex overflow-hidden">
               
-              {/* Left Grip Area with Rubber Texture */}
-              <div className="w-16 relative border-r border-white/10" 
+              {/* Left Control Panel - Physical Camera Buttons */}
+              <div className="w-20 relative border-r border-white/10 flex flex-col items-center justify-center gap-6 py-8" 
                    style={{ 
-                     background: 'url(#rubberGrip)',
-                     boxShadow: 'inset -3px 0 8px rgba(0,0,0,0.5)'
+                     background: 'url(#carbonFiber)',
+                     boxShadow: 'inset -4px 0 12px rgba(0,0,0,0.7)'
                    }}>
-                {/* Strap Lug */}
-                <div className="absolute top-8 left-1/2 -translate-x-1/2 w-8 h-3 rounded-sm bg-gradient-to-b from-[#333] to-[#1a1a1a] border border-white/10" 
-                     style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.8), inset 0 1px rgba(255,255,255,0.1)' }} />
+                {/* Strap Lug Top */}
+                <div className="absolute top-6 left-1/2 -translate-x-1/2 w-9 h-3.5 rounded-sm bg-gradient-to-b from-[#2a2a2a] to-[#0a0a0a] border border-white/15" 
+                     style={{ boxShadow: '0 3px 6px rgba(0,0,0,0.9), inset 0 1px rgba(255,255,255,0.12)' }} />
+                
+                {/* Fn (Function) Button */}
+                <button 
+                  className="relative w-14 h-14 rounded-lg group"
+                  title="Function Mode"
+                >
+                  <div className="absolute inset-0 rounded-lg bg-gradient-to-b from-[#2a2a2a] via-[#1a1a1a] to-[#0a0a0a] shadow-[0_3px_0_#000000,0_5px_8px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:shadow-[0_4px_0_#000000,0_6px_12px_rgba(0,0,0,0.9)] group-active:shadow-[0_1px_0_#000000,inset_0_3px_6px_rgba(0,0,0,0.8)] group-active:translate-y-[2px] transition-all border border-white/10" 
+                       style={{ filter: 'url(#buttonEmboss)' }}>
+                    {/* Matte texture overlay */}
+                    <div className="absolute inset-0.5 rounded opacity-40" style={{ background: 'url(#matteBlack)' }} />
+                  </div>
+                  <span className="relative z-10 text-orange-400 text-xs font-bold tracking-widest group-hover:text-orange-300 drop-shadow-[0_0_4px_rgba(251,146,60,0.5)]">Fn</span>
+                </button>
+                
+                {/* Layers/Reference Button */}
+                <button 
+                  className="relative w-14 h-14 rounded-lg group"
+                  title="Layers Panel"
+                >
+                  <div className="absolute inset-0 rounded-lg bg-gradient-to-b from-[#2a2a2a] via-[#1a1a1a] to-[#0a0a0a] shadow-[0_3px_0_#000000,0_5px_8px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:shadow-[0_4px_0_#000000,0_6px_12px_rgba(0,0,0,0.9)] group-active:shadow-[0_1px_0_#000000,inset_0_3px_6px_rgba(0,0,0,0.8)] group-active:translate-y-[2px] transition-all border border-white/10" 
+                       style={{ filter: 'url(#buttonEmboss)' }}>
+                    <div className="absolute inset-0.5 rounded opacity-40" style={{ background: 'url(#matteBlack)' }} />
+                  </div>
+                  <Layers className="relative z-10 w-6 h-6 mx-auto text-purple-400 group-hover:text-purple-300 drop-shadow-[0_0_4px_rgba(168,85,247,0.5)]" />
+                </button>
+                
+                {/* Focus/AF-ON Button */}
+                <button 
+                  className="relative w-14 h-14 rounded-full group"
+                  title="Auto Focus"
+                >
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-b from-[#2a2a2a] via-[#1a1a1a] to-[#0a0a0a] shadow-[0_3px_0_#000000,0_5px_8px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:shadow-[0_4px_0_#000000,0_6px_12px_rgba(0,0,0,0.9)] group-active:shadow-[0_1px_0_#000000,inset_0_3px_6px_rgba(0,0,0,0.8)] group-active:translate-y-[2px] transition-all border border-white/10">
+                    {/* Knurled ring texture */}
+                    <div className="absolute inset-0 rounded-full opacity-30" style={{ background: 'url(#knurledFine)' }} />
+                  </div>
+                  <Focus className="relative z-10 w-6 h-6 mx-auto text-cyan-400 group-hover:text-cyan-300 drop-shadow-[0_0_4px_rgba(34,211,238,0.5)]" />
+                </button>
+                
+                {/* DOF Preview Button (Small) */}
+                <button 
+                  className="relative w-12 h-8 rounded-md group"
+                  title="Depth Preview"
+                >
+                  <div className="absolute inset-0 rounded-md bg-gradient-to-b from-[#2a2a2a] via-[#1a1a1a] to-[#0a0a0a] shadow-[0_2px_0_#000000,0_3px_6px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:shadow-[0_3px_0_#000000,0_4px_8px_rgba(0,0,0,0.9)] group-active:shadow-[0_1px_0_#000000,inset_0_2px_4px_rgba(0,0,0,0.8)] group-active:translate-y-[1px] transition-all border border-white/10">
+                    <div className="absolute inset-0.5 rounded opacity-40" style={{ background: 'url(#matteBlack)' }} />
+                  </div>
+                  <Circle className="relative z-10 w-4 h-4 mx-auto text-emerald-400 group-hover:text-emerald-300 drop-shadow-[0_0_3px_rgba(52,211,153,0.5)]" />
+                </button>
+                
+                {/* Grid Overlay Toggle */}
+                <button 
+                  className="relative w-12 h-8 rounded-md group"
+                  title="Grid Overlay"
+                >
+                  <div className="absolute inset-0 rounded-md bg-gradient-to-b from-[#2a2a2a] via-[#1a1a1a] to-[#0a0a0a] shadow-[0_2px_0_#000000,0_3px_6px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:shadow-[0_3px_0_#000000,0_4px_8px_rgba(0,0,0,0.9)] group-active:shadow-[0_1px_0_#000000,inset_0_2px_4px_rgba(0,0,0,0.8)] group-active:translate-y-[1px] transition-all border border-white/10">
+                    <div className="absolute inset-0.5 rounded opacity-40" style={{ background: 'url(#matteBlack)' }} />
+                  </div>
+                  <Grid className="relative z-10 w-4 h-4 mx-auto text-amber-400 group-hover:text-amber-300 drop-shadow-[0_0_3px_rgba(251,191,36,0.5)]" />
+                </button>
+                
+                {/* Strap Lug Bottom */}
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-9 h-3.5 rounded-sm bg-gradient-to-b from-[#2a2a2a] to-[#0a0a0a] border border-white/15" 
+                     style={{ boxShadow: '0 3px 6px rgba(0,0,0,0.9), inset 0 1px rgba(255,255,255,0.12)' }} />
               </div>
 
               {/* Center: LCD Screen Area */}
@@ -681,79 +787,115 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
               {/* Right Control Panel - D-Pad & Buttons */}
               <div className="w-40 border-l border-white/10 p-4 flex flex-col items-center gap-6"
                    style={{ 
-                     background: 'linear-gradient(90deg, #1a1a1a 0%, #0f0f0f 50%, #1a1a1a 100%)',
-                     boxShadow: 'inset 3px 0 8px rgba(0,0,0,0.5)'
+                     background: 'url(#carbonFiber)',
+                     boxShadow: 'inset 4px 0 12px rgba(0,0,0,0.7)'
                    }}>
                 
-                {/* Mode Dial - Enhanced Realism */}
-                <div className="relative w-24 h-24 rounded-full bg-gradient-to-b from-[#3a3a3a] via-[#2a2a2a] to-[#1a1a1a] shadow-[inset_0_2px_4px_rgba(0,0,0,0.6),0_2px_0_rgba(255,255,255,0.1),0_4px_12px_rgba(0,0,0,0.5)] border-2 border-white/20">
-                  {/* Knurled edge texture */}
-                  <div className="absolute inset-0 rounded-full opacity-40" style={{ background: 'url("data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cdefs%3E%3Cpattern id=\'ridges\' width=\'3\' height=\'100\' patternUnits=\'userSpaceOnUse\'%3E%3Crect x=\'0\' width=\'1\' height=\'100\' fill=\'rgba(255,255,255,0.15)\'/%3E%3Crect x=\'1\' width=\'1\' height=\'100\' fill=\'rgba(0,0,0,0.15)\'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\'100\' height=\'100\' fill=\'url(%23ridges)\'/%3E%3C/svg%3E")' }} />
+                {/* Mode Dial - Ultra Realistic */}
+                <div className="relative w-24 h-24 rounded-full bg-gradient-to-b from-[#4a4a4a] via-[#2a2a2a] to-[#0d0d0d] shadow-[0_4px_0_#000000,0_6px_15px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.15),inset_0_-3px_8px_rgba(0,0,0,0.7)] border-2 border-white/25"
+                     style={{ filter: 'url(#buttonEmboss)' }}>
+                  {/* Knurled edge texture - deep grooves */}
+                  <div className="absolute inset-0 rounded-full opacity-35" style={{ background: 'url(#knurledFine)' }} />
                   
-                  <div className="absolute inset-2 rounded-full bg-gradient-to-b from-[#0a0a0a] to-[#000000] shadow-[inset_0_2px_8px_rgba(0,0,0,0.9),0_1px_0_rgba(255,255,255,0.05)]" />
+                  {/* Inner recessed center */}
+                  <div className="absolute inset-[10px] rounded-full bg-gradient-to-b from-[#0a0a0a] to-[#000000] shadow-[inset_0_3px_10px_rgba(0,0,0,0.95),0_1px_0_rgba(255,255,255,0.06)]" />
+                  
+                  {/* Brushed metal finish */}
+                  <div className="absolute inset-[10px] rounded-full opacity-20" style={{ background: 'url(#brushedMetal)' }} />
+                  
                   <div className="absolute inset-0 flex items-center justify-center z-10">
-                    <Settings2 className="w-7 h-7 text-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.6)]" />
+                    <Settings2 className="w-7 h-7 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.7)]" />
                   </div>
-                  {/* Dial indicator with embossing */}
-                  <div className="absolute top-0.5 left-1/2 -translate-x-1/2 w-1.5 h-4 bg-gradient-to-b from-red-500 to-red-700 rounded-full shadow-[0_0_6px_rgba(239,68,68,0.9),inset_0_1px_0_rgba(255,255,255,0.3)]" />
-                  {/* Mode markings */}
+                  
+                  {/* Red indicator pointer - beveled */}
+                  <div className="absolute top-1 left-1/2 -translate-x-1/2 w-2 h-5 bg-gradient-to-b from-red-500 to-red-800 rounded-full shadow-[0_0_8px_rgba(239,68,68,1),inset_0_1px_0_rgba(255,255,255,0.4),0_2px_4px_rgba(0,0,0,0.8)] border border-red-600" />
+                  
+                  {/* Mode markings - engraved style */}
                   <div className="absolute inset-0">
                     {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
                       <div
                         key={i}
-                        className="absolute w-0.5 h-1 bg-white/30"
+                        className="absolute w-0.5 h-2 bg-white/40 shadow-[inset_0_1px_1px_rgba(0,0,0,0.6)]"
                         style={{
-                          top: '8px',
+                          top: '6px',
                           left: '50%',
                           transform: `translateX(-50%) rotate(${angle}deg)`,
-                          transformOrigin: '50% 40px',
+                          transformOrigin: '50% 42px',
                         }}
                       />
                     ))}
                   </div>
                 </div>
                 
-                {/* Function Buttons - Enhanced */}
+                {/* Function Buttons - Deep 3D Press */}
                 <div className="flex flex-col gap-3">
                   {[Menu, Grid3x3, Play].map((Icon, i) => (
                     <button key={i} 
-                            className="relative w-12 h-12 rounded-lg bg-gradient-to-b from-[#3a3a3a] via-[#2a2a2a] to-[#1a1a1a] shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_3px_6px_rgba(0,0,0,0.6),0_1px_0_rgba(255,255,255,0.08)] border-2 border-white/20 hover:shadow-[0_5px_10px_rgba(0,0,0,0.7)] active:shadow-[inset_0_3px_6px_rgba(0,0,0,0.7)] active:translate-y-0.5 transition-all group">
-                      <div className="absolute inset-0.5 rounded opacity-30" style={{ background: 'url("data:image/svg+xml,%3Csvg width=\'50\' height=\'50\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cdefs%3E%3Cpattern id=\'dots\' width=\'3\' height=\'3\' patternUnits=\'userSpaceOnUse\'%3E%3Ccircle cx=\'1.5\' cy=\'1.5\' r=\'0.4\' fill=\'rgba(255,255,255,0.15)\'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\'50\' height=\'50\' fill=\'url(%23dots)\'/%3E%3C/svg%3E")' }} />
-                      <Icon className="relative w-5 h-5 mx-auto text-cyan-400/80 group-hover:text-cyan-300 transition-colors" />
+                            className="relative w-14 h-14 rounded-lg group">
+                      <div className="absolute inset-0 rounded-lg bg-gradient-to-b from-[#2a2a2a] via-[#1a1a1a] to-[#0a0a0a] shadow-[0_3px_0_#000000,0_5px_10px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.12)] group-hover:shadow-[0_4px_0_#000000,0_6px_12px_rgba(0,0,0,0.9)] group-active:shadow-[0_1px_0_#000000,inset_0_3px_8px_rgba(0,0,0,0.85)] group-active:translate-y-[2px] transition-all border border-white/10"
+                           style={{ filter: 'url(#buttonEmboss)' }}>
+                        {/* Matte texture */}
+                        <div className="absolute inset-0.5 rounded opacity-45" style={{ background: 'url(#matteBlack)' }} />
+                        
+                        {/* Grip texture */}
+                        <div className="absolute inset-0.5 rounded opacity-20" style={{ background: 'url(#knurledFine)' }} />
+                      </div>
+                      <Icon className="relative w-5 h-5 mx-auto text-cyan-400/80 group-hover:text-cyan-300 drop-shadow-[0_0_4px_rgba(34,211,238,0.4)] transition-colors" />
                     </button>
                   ))}
                 </div>
                 
-                {/* D-Pad Navigation Cluster - Enhanced */}
+                {/* D-Pad Navigation Cluster - Ultra Realistic 3D */}
                 <div className="relative w-28 h-28">
-                  {/* Center SET button - Enhanced */}
-                  <button className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-gradient-to-b from-[#4a4a4a] via-[#2a2a2a] to-[#1a1a1a] shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_3px_6px_rgba(0,0,0,0.6),0_1px_0_rgba(255,255,255,0.1)] border-2 border-white/25 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_4px_10px_rgba(0,0,0,0.7)] active:shadow-[inset_0_3px_6px_rgba(0,0,0,0.7)] active:translate-y-0.5 transition-all z-10">
-                    <div className="absolute inset-2 rounded-full bg-[#0a0a0a] shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)]" />
-                    <span className="relative text-[11px] text-cyan-400 font-bold tracking-widest drop-shadow-[0_0_4px_rgba(34,211,238,0.5)]">SET</span>
+                  {/* Center SET button - Deep press mechanism */}
+                  <button className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full group z-10">
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-b from-[#4a4a4a] via-[#2a2a2a] to-[#0d0d0d] shadow-[0_3px_0_#000000,0_5px_10px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.15)] group-hover:shadow-[0_4px_0_#000000,0_6px_12px_rgba(0,0,0,0.9)] group-active:shadow-[0_1px_0_#000000,inset_0_3px_8px_rgba(0,0,0,0.85)] group-active:translate-y-[2px] transition-all border-2 border-white/20"
+                         style={{ filter: 'url(#buttonEmboss)' }}>
+                      {/* Knurled texture */}
+                      <div className="absolute inset-0 rounded-full opacity-25" style={{ background: 'url(#knurledFine)' }} />
+                    </div>
+                    <div className="absolute inset-3 rounded-full bg-[#050505] shadow-[inset_0_3px_6px_rgba(0,0,0,0.95)]" />
+                    <span className="relative text-xs text-cyan-400 font-bold tracking-[0.15em] drop-shadow-[0_0_6px_rgba(34,211,238,0.6)]">SET</span>
                   </button>
 
-                  {/* Up button - Enhanced */}
-                  <button className="absolute top-0 left-1/2 -translate-x-1/2 w-11 h-12 rounded-t-2xl bg-gradient-to-b from-[#3a3a3a] via-[#2a2a2a] to-[#1a1a1a] shadow-[0_2px_0_rgba(255,255,255,0.08),0_4px_8px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] hover:shadow-[0_6px_12px_rgba(0,0,0,0.6)] active:shadow-[inset_0_3px_6px_rgba(0,0,0,0.7)] active:translate-y-0.5 transition-all border-t-2 border-x-2 border-white/15">
-                    <ChevronUp className="w-5 h-5 mx-auto mt-1 text-white/70 group-hover:text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
-                    <div className="absolute top-1 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-white/10 rounded-full" />
+                  {/* Up button - 3D tactile */}
+                  <button className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-14 rounded-t-2xl group">
+                    <div className="absolute inset-0 rounded-t-2xl bg-gradient-to-b from-[#2a2a2a] via-[#1a1a1a] to-[#0a0a0a] shadow-[0_3px_0_#000000,0_4px_8px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:shadow-[0_4px_0_#000000,0_5px_10px_rgba(0,0,0,0.8)] group-active:shadow-[0_1px_0_#000000,inset_0_2px_6px_rgba(0,0,0,0.8)] group-active:translate-y-[2px] transition-all border-t-2 border-x-2 border-white/10"
+                         style={{ filter: 'url(#buttonEmboss)' }}>
+                      <div className="absolute inset-0.5 rounded-t-2xl opacity-40" style={{ background: 'url(#matteBlack)' }} />
+                    </div>
+                    <ChevronUp className="relative w-5 h-5 mx-auto mt-2 text-white/80 group-hover:text-white drop-shadow-[0_2px_3px_rgba(0,0,0,0.9)]" />
+                    <div className="absolute top-2 left-1/2 -translate-x-1/2 w-5 h-0.5 bg-white/15 rounded-full shadow-[inset_0_1px_1px_rgba(0,0,0,0.6)]" />
                   </button>
 
-                  {/* Right button - Enhanced */}
-                  <button className="absolute right-0 top-1/2 -translate-y-1/2 w-12 h-11 rounded-r-2xl bg-gradient-to-r from-[#2a2a2a] via-[#1a1a1a] to-[#0a0a0a] shadow-[0_2px_0_rgba(255,255,255,0.08),0_4px_8px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] hover:shadow-[0_6px_12px_rgba(0,0,0,0.6)] active:shadow-[inset_0_3px_6px_rgba(0,0,0,0.7)] active:translate-x-0.5 transition-all border-r-2 border-y-2 border-white/15">
-                    <ChevronRight className="w-5 h-5 mx-auto text-white/70 group-hover:text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
-                    <div className="absolute right-1 top-1/2 -translate-y-1/2 h-4 w-0.5 bg-white/10 rounded-full" />
+                  {/* Right button - 3D tactile */}
+                  <button className="absolute right-0 top-1/2 -translate-y-1/2 w-14 h-12 rounded-r-2xl group">
+                    <div className="absolute inset-0 rounded-r-2xl bg-gradient-to-r from-[#1a1a1a] via-[#0d0d0d] to-[#050505] shadow-[0_3px_0_#000000,0_4px_8px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:shadow-[0_4px_0_#000000,0_5px_10px_rgba(0,0,0,0.8)] group-active:shadow-[0_1px_0_#000000,inset_0_2px_6px_rgba(0,0,0,0.8)] group-active:translate-x-[2px] transition-all border-r-2 border-y-2 border-white/10"
+                         style={{ filter: 'url(#buttonEmboss)' }}>
+                      <div className="absolute inset-0.5 rounded-r-2xl opacity-40" style={{ background: 'url(#matteBlack)' }} />
+                    </div>
+                    <ChevronRight className="relative w-5 h-5 mx-auto text-white/80 group-hover:text-white drop-shadow-[0_2px_3px_rgba(0,0,0,0.9)]" />
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2 h-5 w-0.5 bg-white/15 rounded-full shadow-[inset_0_1px_1px_rgba(0,0,0,0.6)]" />
                   </button>
 
-                  {/* Down button - Enhanced */}
-                  <button className="absolute bottom-0 left-1/2 -translate-x-1/2 w-11 h-12 rounded-b-2xl bg-gradient-to-b from-[#1a1a1a] via-[#0a0a0a] to-[#000000] shadow-[0_2px_0_rgba(255,255,255,0.08),0_4px_8px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] hover:shadow-[0_6px_12px_rgba(0,0,0,0.6)] active:shadow-[inset_0_3px_6px_rgba(0,0,0,0.7)] active:translate-y-0.5 transition-all border-b-2 border-x-2 border-white/15">
-                    <ChevronDown className="w-5 h-5 mx-auto mb-1 text-white/70 group-hover:text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
-                    <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-white/10 rounded-full" />
+                  {/* Down button - 3D tactile */}
+                  <button className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-14 rounded-b-2xl group">
+                    <div className="absolute inset-0 rounded-b-2xl bg-gradient-to-b from-[#0d0d0d] via-[#050505] to-[#000000] shadow-[0_3px_0_#000000,0_4px_8px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:shadow-[0_4px_0_#000000,0_5px_10px_rgba(0,0,0,0.8)] group-active:shadow-[0_1px_0_#000000,inset_0_2px_6px_rgba(0,0,0,0.8)] group-active:translate-y-[2px] transition-all border-b-2 border-x-2 border-white/10"
+                         style={{ filter: 'url(#buttonEmboss)' }}>
+                      <div className="absolute inset-0.5 rounded-b-2xl opacity-40" style={{ background: 'url(#matteBlack)' }} />
+                    </div>
+                    <ChevronDown className="relative w-5 h-5 mx-auto mb-2 text-white/80 group-hover:text-white drop-shadow-[0_2px_3px_rgba(0,0,0,0.9)]" />
+                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-5 h-0.5 bg-white/15 rounded-full shadow-[inset_0_1px_1px_rgba(0,0,0,0.6)]" />
                   </button>
 
-                  {/* Left button - Enhanced */}
-                  <button className="absolute left-0 top-1/2 -translate-y-1/2 w-12 h-11 rounded-l-2xl bg-gradient-to-l from-[#2a2a2a] via-[#1a1a1a] to-[#0a0a0a] shadow-[0_2px_0_rgba(255,255,255,0.08),0_4px_8px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] hover:shadow-[0_6px_12px_rgba(0,0,0,0.6)] active:shadow-[inset_0_3px_6px_rgba(0,0,0,0.7)] active:translate-x-0.5 transition-all border-l-2 border-y-2 border-white/15">
-                    <ChevronLeft className="w-5 h-5 mx-auto text-white/70 group-hover:text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" />
-                    <div className="absolute left-1 top-1/2 -translate-y-1/2 h-4 w-0.5 bg-white/10 rounded-full" />
+                  {/* Left button - 3D tactile */}
+                  <button className="absolute left-0 top-1/2 -translate-y-1/2 w-14 h-12 rounded-l-2xl group">
+                    <div className="absolute inset-0 rounded-l-2xl bg-gradient-to-l from-[#1a1a1a] via-[#0d0d0d] to-[#050505] shadow-[0_3px_0_#000000,0_4px_8px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:shadow-[0_4px_0_#000000,0_5px_10px_rgba(0,0,0,0.8)] group-active:shadow-[0_1px_0_#000000,inset_0_2px_6px_rgba(0,0,0,0.8)] group-active:translate-x-[-2px] transition-all border-l-2 border-y-2 border-white/10"
+                         style={{ filter: 'url(#buttonEmboss)' }}>
+                      <div className="absolute inset-0.5 rounded-l-2xl opacity-40" style={{ background: 'url(#matteBlack)' }} />
+                    </div>
+                    <ChevronLeft className="relative w-5 h-5 mx-auto text-white/80 group-hover:text-white drop-shadow-[0_2px_3px_rgba(0,0,0,0.9)]" />
+                    <div className="absolute left-2 top-1/2 -translate-y-1/2 h-5 w-0.5 bg-white/15 rounded-full shadow-[inset_0_1px_1px_rgba(0,0,0,0.6)]" />
                   </button>
                 </div>
               </div>
@@ -765,59 +907,95 @@ export const ImageGenerationDrawer = ({ onGenerate, cameraSettings, prompt }: Im
                    background: 'url(#brushedMetal)',
                    boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.5), inset 0 -1px 2px rgba(255,255,255,0.05)'
                  }}>
-              {/* Left Button - INFO */}
+              {/* Left Button - INFO (Enhanced Realism) */}
               <button
-                className="group relative w-16 h-16 rounded-full bg-gradient-to-b from-[#2a2a2a] via-[#1a1a1a] to-[#0a0a0a] shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_2px_4px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.05)] border border-white/10 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_3px_6px_rgba(0,0,0,0.6),0_1px_0_rgba(255,255,255,0.08)] active:shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)] active:translate-y-0.5 transition-all"
+                className="group relative w-20 h-20 rounded-lg"
               >
-                <div className="absolute inset-0 rounded-full" style={{ background: 'url("data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cdefs%3E%3Cpattern id=\'knurl\' width=\'4\' height=\'4\' patternUnits=\'userSpaceOnUse\'%3E%3Ccircle cx=\'2\' cy=\'2\' r=\'0.5\' fill=\'rgba(255,255,255,0.03)\'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\'100\' height=\'100\' fill=\'url(%23knurl)\'/%3E%3C/svg%3E")' }} />
-                <span className="relative z-10 text-cyan-400 text-[11px] font-bold tracking-widest group-hover:text-cyan-300 transition-colors">INFO</span>
+                <div className="absolute inset-0 rounded-lg bg-gradient-to-b from-[#2a2a2a] via-[#1a1a1a] to-[#0a0a0a] shadow-[0_4px_0_#000000,0_6px_12px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.12)] group-hover:shadow-[0_5px_0_#000000,0_7px_15px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.15)] group-active:shadow-[0_1px_0_#000000,inset_0_4px_8px_rgba(0,0,0,0.85)] group-active:translate-y-[3px] transition-all border border-white/10" 
+                     style={{ filter: 'url(#buttonEmboss)' }}>
+                  {/* Matte black texture */}
+                  <div className="absolute inset-0.5 rounded-lg opacity-50" style={{ background: 'url(#matteBlack)' }} />
+                  
+                  {/* Knurled grip pattern */}
+                  <div className="absolute inset-0 rounded-lg opacity-20" style={{ background: 'url(#knurledFine)' }} />
+                </div>
+                <span className="relative z-10 text-cyan-400 text-xs font-bold tracking-[0.15em] group-hover:text-cyan-300 drop-shadow-[0_0_6px_rgba(34,211,238,0.6)] transition-colors">INFO</span>
               </button>
               
-              {/* Center Button - SHUTTER/GENERATE (AF-ON Style) */}
+              {/* Center Button - ULTIMATE REALISTIC SHUTTER BUTTON */}
               <button
                 onClick={handleGenerate}
                 disabled={isGenerating}
-                className="group relative w-28 h-28 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+                className="group relative w-32 h-32 rounded-full disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                {/* Main button body */}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-b from-[#8B0000] via-[#660000] to-[#4a0000] shadow-[0_6px_0_#2a0000,0_8px_16px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.2)] group-hover:shadow-[0_6px_0_#2a0000,0_10px_20px_rgba(139,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.3)] group-active:shadow-[0_2px_0_#2a0000,0_4px_8px_rgba(0,0,0,0.6),inset_0_2px_4px_rgba(0,0,0,0.4)] group-active:translate-y-1 transition-all border-2 border-[#a00000]" />
+                {/* Base mounting plate - Dark metal foundation */}
+                <div className="absolute inset-0 rounded-full bg-[#050505] shadow-[0_0_0_6px_#0d0d0d,0_0_0_7px_#1a1a1a,0_14px_35px_rgba(0,0,0,0.95)]" />
                 
-                {/* Metallic ring */}
-                <div className="absolute inset-2 rounded-full bg-gradient-to-b from-[#3a3a3a] to-[#1a1a1a] shadow-[inset_0_2px_4px_rgba(0,0,0,0.8),0_1px_0_rgba(255,255,255,0.1)]" />
+                {/* Outer beveled ring - Chrome edge */}
+                <div className="absolute inset-[8px] rounded-full bg-gradient-to-br from-[#6a6a6a] via-[#2a2a2a] via-50% to-[#0a0a0a] shadow-[inset_0_3px_6px_rgba(255,255,255,0.2),inset_0_-4px_12px_rgba(0,0,0,0.8),0_2px_0_rgba(255,255,255,0.12)]" 
+                     style={{ filter: 'url(#buttonEmboss)' }} />
                 
-                {/* Inner red glow */}
-                <div className="absolute inset-4 rounded-full bg-gradient-to-b from-red-500/20 to-red-700/40 shadow-[inset_0_2px_8px_rgba(220,38,38,0.6)]" />
+                {/* Middle ring - Brushed dark metal */}
+                <div className="absolute inset-[16px] rounded-full border border-white/5" 
+                     style={{ 
+                       background: 'url(#brushedMetal)',
+                       boxShadow: 'inset 0 4px 8px rgba(0,0,0,0.9), inset 0 -1px 2px rgba(255,255,255,0.06), 0 1px 0 rgba(255,255,255,0.08)'
+                     }} />
                 
-                {/* Knurled texture */}
-                <div className="absolute inset-0 rounded-full opacity-30" style={{ background: 'url("data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cdefs%3E%3Cpattern id=\'diamond\' width=\'6\' height=\'6\' patternUnits=\'userSpaceOnUse\' patternTransform=\'rotate(45)\'%3E%3Crect width=\'1\' height=\'6\' fill=\'rgba(255,255,255,0.1)\'/%3E%3Crect width=\'6\' height=\'1\' fill=\'rgba(255,255,255,0.1)\'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\'100\' height=\'100\' fill=\'url(%23diamond)\'/%3E%3C/svg%3E")' }} />
-                
-                {/* Center icon/text */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-                  {isGenerating ? (
-                    <>
-                      <Camera className="w-8 h-8 text-white animate-pulse mb-1" />
-                      <span className="text-[10px] text-white font-bold tracking-widest">CAPTURE</span>
-                    </>
-                  ) : (
-                    <>
-                      <div className="w-7 h-7 rounded-full border-3 border-white mb-1 shadow-[0_0_10px_rgba(255,255,255,0.6)]" />
-                      <span className="text-[10px] text-white font-bold tracking-widest drop-shadow-lg">SHOOT</span>
-                    </>
-                  )}
+                {/* Red shutter button - Deep 3D press mechanism */}
+                <div className="absolute inset-[24px] rounded-full bg-gradient-to-b from-[#bb0000] via-[#880000] via-60% to-[#550000] shadow-[0_5px_0_#330000,0_7px_25px_rgba(200,0,0,0.9),inset_0_3px_8px_rgba(255,60,60,0.6),inset_0_-3px_12px_rgba(40,0,0,0.95)] group-hover:from-[#dd1111] group-hover:via-[#990000] group-hover:shadow-[0_6px_0_#330000,0_9px_30px_rgba(255,0,0,0.95),inset_0_3px_8px_rgba(255,80,80,0.7)] group-active:shadow-[0_1px_0_#330000,inset_0_8px_20px_rgba(0,0,0,0.98)] group-active:translate-y-[4px] disabled:group-hover:shadow-none disabled:group-hover:translate-y-0 transition-all duration-100 border border-[#660000]">
+                  
+                  {/* Fine knurled grip texture */}
+                  <div className="absolute inset-0 rounded-full opacity-25" style={{ background: 'url(#knurledFine)' }} />
+                  
+                  {/* Carbon fiber center inlay */}
+                  <div className="absolute inset-[6px] rounded-full opacity-15" style={{ background: 'url(#carbonFiber)' }} />
+                  
+                  {/* Center content */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+                    {isGenerating ? (
+                      <>
+                        <Camera className="w-9 h-9 text-white animate-pulse mb-1.5 drop-shadow-[0_3px_8px_rgba(0,0,0,0.9)]" strokeWidth={3} />
+                        <span className="text-[11px] text-white font-bold tracking-[0.2em] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">CAPTURE</span>
+                      </>
+                    ) : (
+                      <>
+                        <div className="w-8 h-8 rounded-full border-[3px] border-white mb-1.5 shadow-[0_0_12px_rgba(255,255,255,0.7),inset_0_0_4px_rgba(255,255,255,0.3)]" />
+                        <span className="text-[11px] text-white font-bold tracking-[0.2em] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">SHOOT</span>
+                      </>
+                    )}
+                  </div>
+                  
+                  {/* Top-left specular highlight */}
+                  <div className="absolute top-[8px] left-[10px] w-[26px] h-[26px] rounded-full bg-gradient-to-br from-white/30 to-transparent pointer-events-none blur-[1.5px]" />
+                  
+                  {/* Bottom-right subtle shadow */}
+                  <div className="absolute bottom-[6px] right-[8px] w-[20px] h-[20px] rounded-full bg-gradient-to-tl from-black/40 to-transparent pointer-events-none blur-[2px]" />
                 </div>
                 
-                {/* Highlight gleam */}
-                <div className="absolute top-3 left-5 w-6 h-6 rounded-full bg-gradient-to-br from-white/20 to-transparent pointer-events-none" />
+                {/* Outer glow ring (ready state) */}
+                <div className="absolute inset-0 rounded-full border-[3px] border-red-500/15 group-hover:border-red-400/30 disabled:border-red-500/5 transition-all" />
+                
+                {/* Subtle ambient pulse */}
+                <div className="absolute inset-0 rounded-full border-2 border-red-500/10 animate-ping" style={{ animationDuration: '4s' }} />
               </button>
 
-              {/* Right Button - MENU/CLOSE */}
+              {/* Right Button - MENU/CLOSE (Enhanced Realism) */}
               <DrawerClose asChild>
                 <button
-                  className="group relative w-16 h-16 rounded-full bg-gradient-to-b from-[#2a2a2a] via-[#1a1a1a] to-[#0a0a0a] shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_2px_4px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.05)] border border-white/10 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_3px_6px_rgba(0,0,0,0.6),0_1px_0_rgba(255,255,255,0.08)] active:shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)] active:translate-y-0.5 transition-all"
+                  className="group relative w-20 h-20 rounded-lg"
                 >
-                  <div className="absolute inset-0 rounded-full" style={{ background: 'url("data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cdefs%3E%3Cpattern id=\'knurl2\' width=\'4\' height=\'4\' patternUnits=\'userSpaceOnUse\'%3E%3Ccircle cx=\'2\' cy=\'2\' r=\'0.5\' fill=\'rgba(255,255,255,0.03)\'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\'100\' height=\'100\' fill=\'url(%23knurl2)\'/%3E%3C/svg%3E")' }} />
+                  <div className="absolute inset-0 rounded-lg bg-gradient-to-b from-[#2a2a2a] via-[#1a1a1a] to-[#0a0a0a] shadow-[0_4px_0_#000000,0_6px_12px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.12)] group-hover:shadow-[0_5px_0_#000000,0_7px_15px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.15)] group-active:shadow-[0_1px_0_#000000,inset_0_4px_8px_rgba(0,0,0,0.85)] group-active:translate-y-[3px] transition-all border border-white/10" 
+                       style={{ filter: 'url(#buttonEmboss)' }}>
+                    {/* Matte black texture */}
+                    <div className="absolute inset-0.5 rounded-lg opacity-50" style={{ background: 'url(#matteBlack)' }} />
+                    
+                    {/* Knurled grip pattern */}
+                    <div className="absolute inset-0 rounded-lg opacity-20" style={{ background: 'url(#knurledFine)' }} />
+                  </div>
                   <div className="relative z-10 w-full h-full flex flex-col items-center justify-center cursor-pointer">
-                    <Menu className="w-5 h-5 text-white/70 group-hover:text-white/90 transition-colors" />
+                    <Menu className="w-6 h-6 text-white/80 group-hover:text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] transition-colors" />
+                    <span className="text-[9px] text-white/60 font-mono tracking-wider mt-1 group-hover:text-white/80">MENU</span>
                   </div>
                 </button>
               </DrawerClose>
