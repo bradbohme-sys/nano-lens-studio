@@ -12,8 +12,10 @@ import {
   Scale,
   User,
   Mountain,
-  Lightbulb
+  Lightbulb,
+  Camera
 } from "lucide-react";
+import { ImageGenerationDrawerV2 } from "../panels/ImageGenerationDrawerV2";
 
 interface ToolSidebarProps {
   activeTool: string;
@@ -48,6 +50,11 @@ export const ToolSidebar = ({ activeTool, onToolChange, module }: ToolSidebarPro
 
   return (
     <aside className="w-16 camera-panel border-r border-border flex flex-col gap-2 p-2">
+      {/* DSLR Camera V2 */}
+      <ImageGenerationDrawerV2 />
+      
+      <div className="w-full h-px bg-border my-2"></div>
+      
       {tools.map(({ id, label, icon: Icon }) => (
         <button
           key={id}
